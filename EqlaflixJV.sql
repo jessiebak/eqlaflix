@@ -147,7 +147,7 @@ INSERT INTO Videogames (Videogames_Titre,Videogames_DateSortie,Videogames_Dével
 VALUES ("Borderlands III",'2012-09-21',"Gearbox Software","2K Games","RPG");
 
 INSERT INTO Videogames (Videogames_Titre,Videogames_DateSortie,Videogames_Développeur,Videogames_Editeur,Videogames_Categorie) 
-VALUES ("Mass Effetc III",'2012-03-09',"Bioware","Electronic Arts");
+VALUES ("Mass Effetc III",'2012-03-09',"Bioware","Electronic Arts","Action-Aventure");
 
 INSERT INTO Videogames (Videogames_Titre,Videogames_DateSortie,Videogames_Développeur,Videogames_Editeur,Videogames_Categorie) 
 VALUES ("Company of Heroes",'2006-09-29',"Relic Entertainment","Sega","Stratégie");
