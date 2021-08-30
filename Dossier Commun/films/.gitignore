@@ -1,0 +1,10 @@
+# Word temporary
+~$*.doc*
+
+*.doc*
+*.txt*
+
+EqlaFlix
+
+__pycache__
+test.py
