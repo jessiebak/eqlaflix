@@ -17,3 +17,8 @@ def ShowallSeriesonConsole():
 	connexion.close()
 
 	ShowAllButton.configure(text= F"VOIR TOUTES LES SERIES: ({total[0] })")
+
+
+
+
+# IDSerie  Serie_TitreVF         Serie_TitreVO        Serie_DateSortie      Series_Episode      Serie_Saisons    Serie_Description    Serie_ActeurPrincipal

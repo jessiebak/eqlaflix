@@ -4,6 +4,9 @@ import sys
 import os
 import random
 
+# IDSerie  Serie_TitreVF         Serie_TitreVO        Serie_DateSortie      Series_Episode      Serie_Saisons    Serie_Description    Serie_ActeurPrincipal
+
+
 def AllUsersConnection(): 
     try: 
         return MC.connect(host = 'localhost', database='eqlaflix', user = 'root', password = 'g5gqwagr' )
@@ -14,31 +17,38 @@ def AllUsersConnection():
             return MC.connect(host = 'localhost', database='eqlaflix', user = 'root', password = 'isaac' )
 
 
-
-
 filmsOptions = ["Afficher", "Modifier", "Ajouter", "Supprimer", "Recherche"]
-filmHeader = [ "Tout sélectionner", "ID", "TITRE DU FILM", "GENRE DU FILM", "AUTEUR(S) DU FILM", "DATE DE SORTIE", "NOMBRE D'ENTREE AU BOX OFFICE", "PAYS"]
-filmHeaderToPrint = [1, 2, 3, 4, 5, 6, 7]
-sqlFilm = {1:"IdFilm", 2:"titre", 3:"genrefilm.nom", 4:"realisateur", 5:"datesortie", 6:"boxoffice", 7:"pays"}
-defaultHeaderList = [1, 2, 3, 4, 5, 6, 7]
 
-filmHeader2 = ["TITRE DU FILM", "REALISATEUR(TRICE) DU FILM", "PAYS", "NOMBRE D'ENTREE AU BOX OFFICE", "DATE DE SORTIE" ]
+# menu de sélection
+filmHeader = [ "Tout sélectionner", "ID", "TITRE(VF) DE LA SERIE", "TITRE(VO) DE LA SERIE", "DATE DE SORTIE", "NOMBRE D'EPISODE", "NOMBRE DE SAISONS", "DESCRIPTION", "ACTEUR PRINCIPAL"]
+
+# entete séléctionner par le user à afficher avec les données
+# filmHeaderToPrint = [1, 2, 3, 4, 5, 6, 7, 8]
+
+
+sqlFilm = {1:"IDSerie", 2:"Serie_TitreVF", 3:"Serie_TitreVO", 4:"Serie_DateSortie", 5:"Series_Episode", 6:"Serie_Saisons", 7:"Serie_Description", 8:"Serie_ActeurPrincipal"}
+
+
+defaultHeaderList = [1, 2, 3, 4, 5, 6, 7, 8]
+
+# les items à modifier lors de l'ajout de films
+filmHeader2 = ["TITRE(VF)", "TITRE(VO)", "DESCRIPTION", "ACTEUR PRINCIPAL" , "DATE DE SORTIE", "NOMBRE D'EPISODE", "NOMBRE DE SAISONS" ]
 
 
 
 
 def FilmMenuSentence(_filmHeaderToPrint):
-    _fimMenuSentence = "Bienvenu cHEZ EqlaFlix/FILMS. \n Veuillez choisir les différentes options d'affichage : "
+    _fimMenuSentence = "Bienvenu cHEZ EqlaFlix/SERIES. \n Veuillez choisir les différentes options d'affichage : "
     for name in filmHeader: 
         if filmHeader.index(name) in _filmHeaderToPrint:
             _fimMenuSentence += "\n" + str(filmHeader.index(name)) + " - " + name + "       ( X )"
         else:
             _fimMenuSentence += "\n" + str(filmHeader.index(name)) + " - " + name
-    _fimMenuSentence += "\n \"OK\" -   pour Afiicher les films \n \"Q\" -	Pour quitter le menu de Films \n Entrez votre choix n° " + str(len(_filmHeaderToPrint) + 1) + " : "
+    _fimMenuSentence += "\n \"OK\" -   pour Afiicher les series \n \"Q\" -	Pour quitter le menu de Series \n Entrez votre choix n° " + str(len(_filmHeaderToPrint) + 1) + " : "
     return _fimMenuSentence
 
 
-# Cette fonction retourne la liste des options de Films à afficher;
+# Cette fonction retourne la liste des options de series à afficher;
 def FilmHeaderToPrint(): 
     _filmHeaderToPrint = []
     _fimMenuSentence = FilmMenuSentence(_filmHeaderToPrint)
@@ -151,13 +161,14 @@ def Execute_Req( _req, _header = 0, _headerToPrint = 0):
         return _matchIdToNumber
 
 
+
 # cette fonction execute la requette finale pour l'affichage aléatoire 
 def Execute_ReqRandom( _req, _header = 0, _headerToPrint = 0):
     _matchIdToNumber = {}
-    randNum = TakePositifNumber(input("Combien de films aléatoires souhaitez vous générer ? "))
+    randNum = TakePositifNumber(input("Combien de series aléatoires souhaitez vous générer ? "))
     connect = AllUsersConnection()
     Cursor = connect.cursor() 
-    req = "select count(*) from films;"
+    req = "select count(*) from series;"
     Cursor.execute(req)
     maxNum = int(Cursor.fetchone()[0])
     try: 
@@ -168,10 +179,10 @@ def Execute_ReqRandom( _req, _header = 0, _headerToPrint = 0):
         if 0 < randNum <= maxNum : 
             randlist = random.sample(filmlist, randNum)
         elif randNum == 0 : 
-            print("Vous avez choisi de ne pas afficher de film. ")
+            print("Vous avez choisi de ne pas afficher de series. ")
             return
         else: 
-            print(f"Nous ne disposons que de {maxNum} films dans notre base de données.")
+            print(f"Nous ne disposons que de {maxNum} series dans notre base de données.")
             randlist = random.sample(filmlist, maxNum)
         if _header != 0 and _headerToPrint != 0 : 
             header = "N°   |  "
@@ -216,9 +227,9 @@ def AddFilm():
     _filmToSave = []
     print("Veuillez entrer : ")
     for elt in filmHeader2: 
-        if filmHeader2.index(elt) <= 2 : 
+        if filmHeader2.index(elt) <= 3 : 
             _filmToSave.append(input(f"{elt} : "))
-        elif filmHeader2.index(elt) == 3 :
+        elif filmHeader2.index(elt) >= 5 :
             _userInput =  input(f"{elt} : ")
             while not IsPositiveNumber(_userInput): 
                 print("Veuillez entrer un entier positif")
@@ -238,7 +249,7 @@ def AddFilm():
 # cette fonction donne l'a possibilité de choisir un genre existant dans la table genre et d'y ajouter si le genre n'existe pas 
 def ChooseInTable(_filmToSave): 
      
-    _header = ["Tout Sélectionner", "Id", "Genre", "description"]
+    _header =  [ "Tout sélectionner", "ID", "TITRE(VF) DE LA SERIE", "TITRE(VO) DE LA SERIE", "DATE DE SORTIE", "NOMBRE D'EPISODE", "NOMBRE DE SAISONS", "DESCRIPTION", "ACTEUR PRINCIPAL"]
     _headerToPrint = [2]
     _req = "select idgenre, nom from genrefilm order by nom asc;"
     print("sélectionnez un élément dans cette liste; taper 0 si vous désirez ajouter un nouveau genre \n ")

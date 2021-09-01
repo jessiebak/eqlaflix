@@ -3,7 +3,7 @@ import datetime
 import mysql.connector
 from Execute_Req import *
 
-sortHeader = [ "Tri par défaut", "mots clés ", "films sortis en : ", "film sortis avant : " , "film sortis après : ", "ayant aumoins ... entrées au B.O"]
+sortHeader = [ "Tri par défaut", "mots clés ", "Series sorties en : ", "Series sortis avant : " , "Series sorties après : ", "ayant aumoins ... Saisons"]
 
 
 
@@ -11,13 +11,13 @@ os.system("cls")
 
 
 def SortMenuSentence(_sortList):
-    _fimMenuSentence = "Bienvenu cHEZ EqlaFlix/FILMS. \n Veuillez choisir les différentes options d'affichage : "
+    _fimMenuSentence = "Bienvenu cHEZ EqlaFlix/SERIES. \n Veuillez choisir les différentes options d'affichage : "
     for name in filmHeader: 
         if filmHeader.index(name) in _sortList:
             _fimMenuSentence += "\n" + str(filmHeader.index(name)) + " - " + name + "       ( X )"
         else:
             _fimMenuSentence += "\n" + str(filmHeader.index(name)) + " - " + name
-    _fimMenuSentence += "\n \"OK\" -   pour Afiicher les films \n \"Q\" -	Pour quitter le menu de Films \n Entrez votre choix n° " + str(len(_sortList) + 1) + " : "
+    _fimMenuSentence += "\n \"OK\" -   pour Afiicher les Series \n \"Q\" -	Pour quitter le menu de Series \n Entrez votre choix n° " + str(len(_sortList) + 1) + " : "
     return _fimMenuSentence
 
 
@@ -70,43 +70,30 @@ def SortMainMenu(_req):
         userChoice = TakePositifNumber(input("Votre choix: "))
     else:
         if userChoice == 1:
-            _req += " order by titre asc;" 
+            _req += " order by Serie_TitreVF asc;" 
             return _req
         elif userChoice == 2: 
             value = "%" + input("terme à rechercher : ") + "%"
-            _req += " and (titre like '" + value + "' or realisateur like '" + value + "' or pays like '" + value + "' or datesortie like '" + value + "' ) order by titre asc;"
+            _req += " where (Serie_TitreVF like '" + value + "' or Serie_TitreVO like '" + value + "' or Serie_Description like '" + value + "' or Serie_ActeurPrincipal like '" + value + "' ) order by Serie_TitreVO asc;"
             return _req
         elif userChoice == 3 : 
             value = "%" + str(TakePositifNumber(input("année recherchée : "))) + "%"
-            _req += " and datesortie like '" + value + "' order by titre asc;" 
+            _req += " where Serie_DateSortie like '" + value + "' order by Serie_TitreVF asc;" 
             return _req
         elif userChoice == 4 : 
             value = TakeDate(input("entrez une date au format \"aaaa/mm/jj\" : "))
-            _req += " and datesortie <= '" + value + "' order by datesortie desc;"
+            _req += " where Serie_DateSortie <= '" + value + "' order by Serie_DateSortie desc;"
             return _req
         elif userChoice == 5 : 
             value = TakeDate(input("entrez une date au format \"aaaa/mm/jj\" : "))
-            _req += " and datesortie >= '" + str(value) + "' order by datesortie asc;"
+            _req += " where Serie_DateSortie >= '" + str(value) + "' order by Serie_DateSortie asc;"
             return _req
         elif userChoice == 6 : 
             value = TakePositifNumber(input("entrez une valeur : "))
-            _req += " and BoxOffice >= " + str(value) + " order by BoxOffice asc;"
+            _req += " where Serie_Saisons >= " + str(value) + " order by Serie_Saisons asc;"
             return _req
 
 
-
-def RandomSearch(): 
-    randNum = TakePositifNumber(input("Combien de films aléatoires souhaitez vous générer ? "))
-    connection = AllUsersConnection()
-    Cursor = connection.cursor() 
-    req = "select count(*) from films;"
-    Cursor.execute(req)
-    maxNum = Cursor.fetchone()
     
 
-
-# print(SortMainMenu(""))
-# print(SortMenu2())
-
-
-# RandomSearch()
+# IDSerie  Serie_TitreVF         Serie_TitreVO        Serie_DateSortie      Series_Episode      Serie_Saisons    Serie_Description    Serie_ActeurPrincipal
