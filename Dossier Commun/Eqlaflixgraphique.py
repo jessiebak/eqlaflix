@@ -6,7 +6,8 @@ import tkinter as tk
 from tkinter.constants import *
 import tkinter.ttk as ttk
 
-from mysql.connector import connection 
+from mysql.connector import connection
+from mysql.connector.errors import ProgrammingError 
 
 #SQL Connection
 # connexion = MC.connect(host= 'localhost', database= 'Eqlaflix', user = 'root', password = 'python4life')
@@ -31,7 +32,7 @@ def ShowAllseries():
 def ShowAllFilms():
 	TreeviewFilms(ResultGrid)
 	curseur = connexion.cursor()
-	req = "select * from films"
+	req = "select films.IdFilm, films.Titre, genrefilm.nom, films.realisateur, films.datesortie, films.boxoffice from films inner join genrefilm on films.genre = genrefilm.idgenre "
 	curseur.execute(req)
 	response = curseur.fetchall()
 	
@@ -102,7 +103,7 @@ def TreeviewFilms(ResultGrid):
 	ResultGrid.column("#0", width=0, stretch = NO)
 	ResultGrid.column("Titre", width=350, anchor = W)
 	ResultGrid.column("DateSortie", width=80, anchor = CENTER)
-	ResultGrid.column("Genre", width=80, anchor = CENTER)
+	ResultGrid.column("Genre", width=150, anchor = CENTER)
 	ResultGrid.column("Réalisateur", width=255, anchor = CENTER)
 	ResultGrid.column("BoxOffice", width=2000, anchor = W)
 
@@ -244,7 +245,7 @@ TitleH2 =tk.Label(FrameH1, text= "Votre plateforme d'information sur les films, 
 
 
 MenuFrame = tk.Frame(WindowFrame, width= root.winfo_screenwidth(), bg="black")
-ShowAllButton= tk.Button(MenuFrame, text= "VOIR TOUTES LES SERIES", command= lambda : [f()for f in [ShowAllseries, ShowallSeriesonConsole]] , font = ("Helvetica", 15))
+ShowAllButton= tk.Button(MenuFrame, text= "VOIR TOUTES LES SERIES", command= lambda : [f()for f in [ShowAllseries]] , font = ("Helvetica", 15))
 sideBar=tk.Frame(root, bg=appBG, width= int(WindowFrame.winfo_width()/6), height= int(WindowFrame.winfo_height()))
 sideBar2=tk.Frame(root, bg=appBG, width= int(WindowFrame.winfo_width()/6), height= int(WindowFrame.winfo_height()))
 resultbox = tk.Frame(root, width=(WindowFrame.winfo_width()- sideBar.winfo_width()), height= root.winfo_screenheight() -WindowFrame.winfo_height()- MenuFrame. winfo_width(), borderwidth=Bdheight, bg= "black")
@@ -269,7 +270,14 @@ searchEntry= tk.Entry(MenuFrame, font=appFont)
 searchEntry.pack(fill= Y)
 
 global connexion 
-connexion = MC.connect(database="Eqlaflix", password= "isaac", user= "root")
+try : 
+	connexion = MC.connect(database="Eqlaflix", password= "isaac", user= "root")
+except ProgrammingError: 
+	try: 
+		connexion = MC.connect(database="Eqlaflix", password= "python4life", user= "root")
+	except:
+		pass
+
 
 	
 
