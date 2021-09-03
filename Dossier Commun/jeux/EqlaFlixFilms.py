@@ -1,11 +1,11 @@
 import sys
 import os
 import time
-import EF_filmsDisplay as EFD
-import EF_AddFilm as EFA
-import EF_Delete as EFDel
-import EF_Search as EFS
-import EF_modify as EFM
+from jeux import EF_filmsDisplay as EFD
+from jeux import EF_AddFilm as EFA
+from jeux import EF_Delete as EFDel
+from jeux import EF_Search as EFS
+from jeux import EF_modify as EFM
 
 os.system('cls')
 
@@ -49,7 +49,6 @@ def DisplayFilmsMenu():
         sys.exit()
 
 
-DisplayFilmsMenu()
 
 
 

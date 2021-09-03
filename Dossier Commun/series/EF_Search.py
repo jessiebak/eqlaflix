@@ -1,7 +1,7 @@
 import os
 import datetime
 import mysql.connector
-from Execute_Req import *
+from series.Execute_Req import *
 
 sortHeader = [ "Tri par défaut", "mots clés ", "Series sorties en : ", "Series sortis avant : " , "Series sorties après : ", "ayant aumoins ... Saisons"]
 
