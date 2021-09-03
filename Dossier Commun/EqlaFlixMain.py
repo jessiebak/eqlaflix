@@ -1,5 +1,9 @@
 import sys
 import os
+# from films.EqlaFlixFilms import *
+from films import EqlaFlixFilms as Films
+from series import EqlaFlixFilms as Series
+from jeux import EqlaFlixFilms as Jeux
 
 os.system('cls')
 

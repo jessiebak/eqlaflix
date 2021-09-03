@@ -1,7 +1,7 @@
 import os
 import datetime
 import mysql.connector
-from Execute_Req import *
+from jeux.Execute_Req import *
 
 os.system("cls")
 
