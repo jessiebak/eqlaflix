@@ -26,7 +26,6 @@ filmHeader2 = ["TITRE DU FILM", "REALISATEUR(TRICE) DU FILM", "PAYS", "NOMBRE D'
 
 
 
-
 def FilmMenuSentence(_filmHeaderToPrint):
     _fimMenuSentence = "Bienvenu cHEZ EqlaFlix/FILMS. \n Veuillez choisir les différentes options d'affichage : "
     for name in filmHeader: 
