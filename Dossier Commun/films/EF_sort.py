@@ -5,7 +5,7 @@ from Execute_Req import AllUsersConnection
 def SortFilms(header):
 	conn= AllUsersConnection()
 	cursor= conn.cursor()
-	cursor.execute("SELECT * from Films ORDER BY ?",header)
+	cursor.execute("SELECT * from Films ORDER BY %s", [header])
 	print(cursor.fetchall())
 
 def DisplaySortingMenu():
@@ -42,3 +42,5 @@ def DisplaySortingMenu():
 
 
 DisplaySortingMenu()
+# SortFilms("titre")
+
