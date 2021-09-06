@@ -1,13 +1,15 @@
 
-from io import StringIO
-from re import search
+
+
 import mysql.connector as MC 
 import tkinter as tk
 from tkinter.constants import *
+
 import tkinter.ttk as ttk
 
 from mysql.connector import connection
 from mysql.connector.errors import ProgrammingError 
+
 
 #SQL Connection
 # connexion = MC.connect(host= 'localhost', database= 'Eqlaflix', user = 'root', password = 'python4life')
@@ -25,7 +27,7 @@ def ShowAllseries():
 	for i, n in enumerate(response):
 		ResultGrid.insert(parent="",index=i, iid=i, values=(n[1], n[3], n[4], n[5],n[6]), tags=n[1])
 	
-	# updaterecord()
+	updaterecord(1)
 
 		
 	
@@ -39,7 +41,8 @@ def ShowAllFilms():
 	for i, n in enumerate(response):
 		ResultGrid.insert(parent="",index=i, iid=i, values=(n[1], n[4], n[2], n[3],n[5]), tags=n[1])
 	
-	
+	updaterecord(2)
+
 
 		
 def ShowAllGames():
@@ -53,7 +56,7 @@ def ShowAllGames():
 	for i, n in enumerate(response):
 			ResultGrid.insert(parent="",index=i, iid=i, values=(n[1], n[2], n[3], n[4],n[5]), tags=n[1])
 
-	
+	updaterecord(3)
 
 
 
@@ -80,6 +83,9 @@ def TreeviewSeries(ResultGrid):
 	ResultGrid.heading("Description", text= "Description", anchor = CENTER)
 
 	#linking Scrollbar to Treeview
+
+
+		
 	scrollingX = tk.Scrollbar(resultbox, orient= HORIZONTAL)
 	scrollingY = tk.Scrollbar(resultbox, orient= VERTICAL)
 	scrollingX.pack(side=BOTTOM, fill= X)
@@ -87,6 +93,10 @@ def TreeviewSeries(ResultGrid):
 	ResultGrid.configure(xscrollcommand=scrollingX.set, yscrollcommand=scrollingY.set)
 	scrollingX.config(command=ResultGrid.xview)
 	scrollingY.config(command=ResultGrid.yview)
+
+	
+
+		
 	ResultGrid.pack(fill= BOTH, expand= True)
 
 
@@ -115,6 +125,7 @@ def TreeviewFilms(ResultGrid):
 	ResultGrid.heading("BoxOffice", text= "Box Office", anchor = W)
 
 	#linking Scrollbar to Treeview
+
 	scrollingX = tk.Scrollbar(resultbox, orient= HORIZONTAL)
 	scrollingY = tk.Scrollbar(resultbox, orient= VERTICAL)
 	scrollingX.pack(side=BOTTOM, fill= X)
@@ -122,6 +133,8 @@ def TreeviewFilms(ResultGrid):
 	ResultGrid.configure(xscrollcommand=scrollingX.set, yscrollcommand=scrollingY.set)
 	scrollingX.config(command=ResultGrid.xview)
 	scrollingY.config(command=ResultGrid.yview)
+
+
 	ResultGrid.pack(fill= BOTH, expand= True)
 
 	#adding Style 
@@ -148,6 +161,7 @@ def TreeviewGames(ResultGrid):
 	ResultGrid.heading("Catégorie", text= "Catégorie", anchor = CENTER)
 
 	#linking Scrollbar to Treeview
+	
 	scrollingX = tk.Scrollbar(resultbox, orient= HORIZONTAL)
 	scrollingY = tk.Scrollbar(resultbox, orient= VERTICAL)
 	scrollingX.pack(side=BOTTOM, fill= X)
@@ -155,8 +169,10 @@ def TreeviewGames(ResultGrid):
 	ResultGrid.configure(xscrollcommand=scrollingX.set, yscrollcommand=scrollingY.set)
 	scrollingX.config(command=ResultGrid.xview)
 	scrollingY.config(command=ResultGrid.yview)
-	ResultGrid.pack(fill= BOTH, expand= True)
 
+		
+	ResultGrid.pack(fill= BOTH, expand= True)
+	
 	#adding Style 
 	style = ttk.Style()
 	style.theme_use("default")
@@ -165,61 +181,83 @@ def TreeviewGames(ResultGrid):
 
 	
 def Seriesmode():
-	for item in ResultGrid.get_children():
-		ResultGrid.delete(item)
+	global ResultGrid
+	ResultGrid.destroy()
+	ResultGrid = createGrid()
 	ShowAllButton.config(text="VOIR TOUTES LES SERIES", command= ShowAllseries)
-	
+		
 
-	
-	
 def FilmsMode():
-	for item in ResultGrid.get_children():
-		ResultGrid.delete(item)
+	
+	global ResultGrid
+	ResultGrid.destroy()
+	ResultGrid = createGrid()
 	ShowAllButton.config(text= "VOIR TOUS LES FILMS", command= ShowAllFilms)
 def GamesMode():
-	for item in ResultGrid.get_children():
-		ResultGrid.delete(item)
+	global ResultGrid
+	ResultGrid.destroy()
+	ResultGrid = createGrid()
 	ShowAllButton.config(text= "VOIR TOUS LES JEUX", command= ShowAllGames)
 	
-# def updaterecord():
-# 	global searchEntry, ResultGrid
-# 	searching = searchEntry.get() 
-# 	curseur = connexion.cursor()
+def updaterecord(tableNumber):
+	global searchEntry, ResultGrid
+	searching= tk.StringVar()
+	searching = searchEntry.get() 
+	# searchEntry.configure(textvariable=searching)
+	# searchEntry = tk.Variable()
+	# searchEntry.trace_add(mode=["write", "read", "unset"], callback=print2)
+	
+	
+	curseur = connexion.cursor()
+	
+	
+	for record in ResultGrid.get_children(): 
+		ResultGrid.delete(record)
+	
+	
+	if tableNumber == 1: 
 		
-	
-# 	for record in ResultGrid.get_children(): 
-# 		ResultGrid.delete(record)
-
-# 	if searching != "":
-# 		req = "select * from series where Serie_TitreVF like %s"
-# 		data = searching +'%',
-# 		curseur.execute(req, data)
-# 		response = curseur.fetchall()
+		req = "select * from series where Serie_TitreVF like %s"
+		data = searching +'%',
+		curseur.execute(req, data)
+		response = curseur.fetchall()
 		
-# 		for i, n in enumerate(response):
-# 			ResultGrid.insert(parent="",index=i, iid=i, values=(n[1], n[3], n[4], n[5],n[6]), tags=n[1])
-	
-	# elif tableNumber == 2:
+		for i, n in enumerate(response):
+			ResultGrid.insert(parent="",index=i, iid=i, values=(n[1], n[3], n[4], n[5],n[6]), tags=n[1])
+	elif tableNumber == 2:
 		
-	# 	req = "select * from films where Titre like %s"
-	# 	data = searching +'%',
-	# 	curseur.execute(req, data)
-	# 	response = curseur.fetchall()
+		req = "select * from films where Titre like %s"
+		data = searching +'%',
+		curseur.execute(req, data)
+		response = curseur.fetchall()
 	
-	# 	for i, n in enumerate(response):
-	# 		ResultGrid.insert(parent="",index=i, iid=i, values=(n[1], n[4], n[2], n[3],n[5]), tags=n[1])
+		for i, n in enumerate(response):
+			ResultGrid.insert(parent="",index=i, iid=i, values=(n[1], n[4], n[2], n[3],n[5]), tags=n[1])
 	
-	# elif tableNumber == 3:	
-	# 	req = "select * from videogames  where Videogames_Titre like %s"
-	# 	data = searching + 's', 
-	# 	curseur.execute(req, data)
-	# 	response = curseur.fetchall()
+	elif tableNumber == 3:	
+		
+		req = "select * from videogames  where Videogames_Titre like %s"
+		data = searching + '%', 
+		curseur.execute(req, data)
+		response = curseur.fetchall()
 	
-	# 	for i, n in enumerate(response):
-	# 			ResultGrid.insert(parent="",index=i, iid=i, values=(n[1], n[2], n[3], n[4],n[5]), tags=n[1])
+		for i, n in enumerate(response):
+				ResultGrid.insert(parent="",index=i, iid=i, values=(n[1], n[2], n[3], n[4],n[5]), tags=n[1])
+				ResultGrid.selection_set(ResultGrid.insert("", "end", values=(searching, 0)))
 	
+	
+	
+	
+	
+	# ResultGrid.after(1000,lambda :  updaterecord(tableNumber))
+def print2():
+	print("Hello World")
 
+def createGrid():
 
+	ResultGrid = ttk.Treeview(resultbox, height= root.winfo_screenheight())
+	ResultGrid.pack(fill= BOTH, expand= True)
+	return ResultGrid
 
 	 
 	
@@ -298,8 +336,8 @@ TitleH1.pack()
 TitleH2.pack()
 
 #Creating Treeview
-ResultGrid = ttk.Treeview(resultbox, height= root.winfo_screenheight())
-ResultGrid.pack(fill= BOTH, expand= True)
+global ResultGrid 
+ResultGrid = createGrid()
 
 
 #End of app method, close window and SQL server

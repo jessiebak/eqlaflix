@@ -1,6 +1,6 @@
 import mysql.connector as MC
 from Execute_Req import AllUsersConnection
-from EqlaFlixFilms import *
+#from EqlaFlixFilms import *
 
 def SortFilms(header):
 	conn= AllUsersConnection()
@@ -37,7 +37,8 @@ def DisplaySortingMenu():
 			_userChoice = input(_menuSentence).lower()
 		except:
 			_userChoice = input( _menuSentence).lower()
-	else:
-		DisplayFilmsMenu
+	#else:
+		#DisplayFilmsMenu
 
-DisplayFilmsMenu()
+
+DisplaySortingMenu()
