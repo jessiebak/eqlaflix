@@ -14,7 +14,7 @@ def AllUsersConnection():
             return MC.connect(host = 'localhost', database='eqlaflix', user = 'root', password = 'isaac' )
 
 
-
+AllUsersConnection()
 
 filmsOptions = ["Afficher", "Modifier", "Ajouter", "Supprimer", "Recherche"]
 filmHeader = [ "Tout sélectionner", "ID", "TITRE DU FILM", "GENRE DU FILM", "AUTEUR(S) DU FILM", "DATE DE SORTIE", "NOMBRE D'ENTREE AU BOX OFFICE", "PAYS"]
