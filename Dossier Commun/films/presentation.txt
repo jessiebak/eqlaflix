@@ -1,0 +1,23 @@
+
+I-  introduction :
+    -   d'où nous vient l'idée du projet ? 
+    -   qu'elle problèmatique souhaitons nous résoudre ? 
+II- mise en oeuvre 
+    1-  organisation du travail 
+    2-  outils utiliser et la raison de leurs utilisation? 
+    3-  
+III- Présentation et démonstratioin  en graphique  
+    a-  présentation globale de l'interface et de ses fonctionnalités 
+    b-  présentation technique: 
+    c-  statistiques (outils , )
+    d-  
+IV-  présentation et démonstration en console 
+
+V-  recap et synthèse des travaux 
+    1-  l'objectif a t il été ateint ? 
+    2-  nombre d'outils utiliser ? nbre de bibliothèque ? nobre de fonctions ? 
+    3-  perspectives et ouverture du débats 
+        -   les défis auxquels nous avons fait face ? 
+        -   les manquements ? 
+        -   solutions que nous proposons ? 
+        -   les fonctions à rajouter dans le futur ? 
