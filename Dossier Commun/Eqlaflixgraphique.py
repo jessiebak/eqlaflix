@@ -188,7 +188,6 @@ def Seriesmode():
 	ShowAllButton.config(text="VOIR TOUTES LES SERIES", command= ShowAllseries)
 	optionlist = optionlistconfig("series")	
 	sortinglist= tk.OptionMenu(SortFrame, choice,*optionlist)
-	
 	sortinglist.pack(side = LEFT)
 
 def FilmsMode():
@@ -231,40 +230,38 @@ def updaterecord(tableNumber):
 	if tableNumber == 1: 
 		
 		req = "select * from series where Serie_TitreVF like %s"
-		data = searching +'%',
+		data = "%" + searching +'%',
 
 		curseur.execute(req, data)
 		response = curseur.fetchall()
-		
+		updatebutton.config(command = lambda : updaterecord(1))
 		for i, n in enumerate(response):
 			ResultGrid.insert(parent="",index=i, iid=i, values=(n[1], n[3], n[4], n[5],n[6]), tags=n[1])
 	elif tableNumber == 2:
 		
 		req = "select films.IdFilm, films.Titre, genrefilm.nom, films.realisateur, films.datesortie, films.boxoffice from films inner join genrefilm on films.genre = genrefilm.idgenre where films.Titre like %s"
-		data = searching +'%',
+		data = "%" + searching +'%',
 		curseur.execute(req, data)
 		response = curseur.fetchall()
-	
+		updatebutton.config(command = lambda : updaterecord(2))
+
 		for i, n in enumerate(response):
 			ResultGrid.insert(parent="",index=i, iid=i, values=(n[1], n[4], n[2], n[3],n[5]), tags=n[1])
 	
 	elif tableNumber == 3:	
 		
 		req = "select * from videogames  where Videogames_Titre like %s"
-		data = searching + '%', 
+		data = "%" + searching + '%', 
 		curseur.execute(req, data)
 		response = curseur.fetchall()
+		updatebutton.config(command = lambda : updaterecord(3))
 	
 		for i, n in enumerate(response):
 				ResultGrid.insert(parent="",index=i, iid=i, values=(n[1], n[2], n[3], n[4],n[5]), tags=n[1])
 				ResultGrid.selection_set(ResultGrid.insert("", "end", values=(searching, 0)))
 	
-	updatebutton = tk.Button(MenuFrame)
-	if updatebutton.winfo_exists() == False:
-		updatebutton.config(text= "Actualiser", command= lambda : updatebutton(tableNumber))
-		updatebutton.pack(side= RIGHT)
-	else: 
-		updatebutton.config(command= lambda : updaterecord(tableNumber))
+	
+	
 
 	
 	
@@ -341,7 +338,7 @@ def optionlistconfig(_mode):
 		
 		return _optionlist
 
-	elif _mode == "Games":
+	elif _mode == "games":
 		
 		_optionlist = ["Trier par Titre","Trier par Date de sortie", "Trier par Editeur", "Trier par Développeur", "Trier par Genrde"] 
 			
@@ -367,7 +364,9 @@ SortFrame.pack(side=LEFT)
 resultbox.pack(side= TOP, anchor = CENTER, fill= BOTH, expand= True)
 TitleH1.pack()
 TitleH2.pack()
-
+global updatebutton
+updatebutton = tk.Button(WindowFrame, text = "Actualiser", font = appFont)
+updatebutton.pack(side= RIGHT)
 # 
 
 
