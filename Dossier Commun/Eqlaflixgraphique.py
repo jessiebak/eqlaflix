@@ -188,8 +188,8 @@ def Seriesmode():
 	ShowAllButton.config(text="VOIR TOUTES LES SERIES", command= ShowAllseries)
 	optionlist = optionlistconfig("series")	
 	sortinglist= tk.OptionMenu(SortFrame, choice,*optionlist)
-	if sortinglist.winfo_ismapped()== False:
-		sortinglist.pack(side = LEFT)
+	
+	sortinglist.pack(side = LEFT)
 
 def FilmsMode():
 	
@@ -201,8 +201,7 @@ def FilmsMode():
 	ShowAllButton.config(text= "VOIR TOUS LES FILMS", command= ShowAllFilms)
 	optionlist = optionlistconfig("films")
 	sortinglist= tk.OptionMenu(SortFrame, choice,*optionlist) 
-	if sortinglist.winfo_ismapped() == False: 
-		sortinglist.pack(side = LEFT)
+	sortinglist.pack(side = LEFT)
 
 def GamesMode():
 	global ResultGrid, optionlist
@@ -214,8 +213,7 @@ def GamesMode():
 	ShowAllButton.config(text= "VOIR TOUS LES JEUX", command= ShowAllGames)
 	optionlist = optionlistconfig("games")
 	sortinglist= tk.OptionMenu(SortFrame, choice,*optionlist)
-	if sortinglist.winfo_ismapped()== False:
-		sortinglist.pack(side = LEFT)
+	sortinglist.pack()
 
 	
 def updaterecord(tableNumber):
@@ -226,14 +224,15 @@ def updaterecord(tableNumber):
 	curseur = connexion.cursor()
 	
 	
-	# for record in ResultGrid.get_children(): 
-	# 	ResultGrid.delete(record)
+	for record in ResultGrid.get_children(): 
+		ResultGrid.delete(record)
 	
 	
 	if tableNumber == 1: 
 		
 		req = "select * from series where Serie_TitreVF like %s"
 		data = searching +'%',
+
 		curseur.execute(req, data)
 		response = curseur.fetchall()
 		
@@ -241,7 +240,7 @@ def updaterecord(tableNumber):
 			ResultGrid.insert(parent="",index=i, iid=i, values=(n[1], n[3], n[4], n[5],n[6]), tags=n[1])
 	elif tableNumber == 2:
 		
-		req = "select * from films where Titre like %s"
+		req = "select films.IdFilm, films.Titre, genrefilm.nom, films.realisateur, films.datesortie, films.boxoffice from films inner join genrefilm on films.genre = genrefilm.idgenre where films.Titre like %s"
 		data = searching +'%',
 		curseur.execute(req, data)
 		response = curseur.fetchall()
@@ -260,8 +259,13 @@ def updaterecord(tableNumber):
 				ResultGrid.insert(parent="",index=i, iid=i, values=(n[1], n[2], n[3], n[4],n[5]), tags=n[1])
 				ResultGrid.selection_set(ResultGrid.insert("", "end", values=(searching, 0)))
 	
-	
-	
+	updatebutton = tk.Button(MenuFrame)
+	if updatebutton.winfo_exists() == False:
+		updatebutton.config(text= "Actualiser", command= lambda : updatebutton(tableNumber))
+		updatebutton.pack(side= RIGHT)
+	else: 
+		updatebutton.config(command= lambda : updaterecord(tableNumber))
+
 	
 	
 	# ResultGrid.after(1000,lambda :  updaterecord(tableNumber))
