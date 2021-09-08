@@ -8,8 +8,9 @@
 - Mettre le logiciel à disposition sur PC pour le faire tester
 
 I-  introduction :
-    a-   d'où nous vient l'idée du projet ? 
-    b-   qu'elle problèmatique souhaitons nous résoudre ? 
+    a-  Présentation de l'équipe et des rôles de chacun  
+    b-  D'où nous vient l'idée du projet ? 
+    c-  Quelle problèmatique souhaitons nous résoudre ? 
 II- mise en oeuvre 
     a-  aléatoire-  organisation du travail 
     b-  outils utiliser et la raison de leurs utilisation? 
