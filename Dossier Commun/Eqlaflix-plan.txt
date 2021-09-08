@@ -1,0 +1,43 @@
+Menu : 
+1) Accéder aux films
+2) Accéder aux séries 
+3) Accéder aux jeux-vidéos
+-------------------------
+Films : 
+1) Film aléatoire 
+-> Entrez le nombre de films aléatoires 
+-> Retour
+2) Trier par genre: 
+3) Trier par réalisateurs 
+4) Trier par date de sortie
+5) Trier par box-office
+6) Modifier la liste:
+-> 1) Ajouter un film
+-> 2) Supprimer un film
+-> 3) Retour
+7) Retour
+---------------------------
+Séries: 
+1) Série aléatoire: 
+-> Entrez le nombre de séries aléatoire
+-> Retour
+2) Trier par titre
+3) Trier par nombre d'épisodes 
+4) Modifier la liste:
+-> 1) Ajouter une série
+-> 2) Supprimer une série
+-> 3) Retour
+5) Retour
+----------------------------
+Jeux-vidéos:
+1) Jeu aléatoire: 
+-> Entrez le nombre de séries aléatoire
+2) Trier par titre
+3) Trier par 
+4) Modifier la liste:
+-> 1) Ajouter un jeu-vidéo 
+-> 2) Supprimer un jeu-vidéo
+-> 3) Retour
+5) Retour
+
+
