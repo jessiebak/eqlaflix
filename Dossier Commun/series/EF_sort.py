@@ -1,6 +1,6 @@
 import mysql.connector as MC
-from Execute_Req import AllUsersConnection
-#from EqlaFlixFilms import *
+from series.Execute_Req import AllUsersConnection
+
 
 def SortFilms(header):
 	conn= AllUsersConnection()
@@ -37,7 +37,7 @@ def DisplaySortingMenu():
 		#DisplayFilmsMenu
 1
 
-DisplaySortingMenu()
+# DisplaySortingMenu()
 
 # SortFilms("titre")
 

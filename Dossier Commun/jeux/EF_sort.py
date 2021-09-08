@@ -1,5 +1,5 @@
 import mysql.connector as MC
-from Execute_Req import AllUsersConnection
+from jeux.Execute_Req import AllUsersConnection
 #from EqlaFlixFilms import *
 
 def SortFilms(header):
@@ -40,7 +40,7 @@ def DisplaySortingMenu():
 		#DisplayFilmsMenu
 1
 
-DisplaySortingMenu()
+# DisplaySortingMenu()
 
 # SortFilms("titre")
 
