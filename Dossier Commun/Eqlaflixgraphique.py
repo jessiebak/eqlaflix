@@ -187,8 +187,8 @@ def Seriesmode():
 	
 	ShowAllButton.config(text="VOIR TOUTES LES SERIES", command= ShowAllseries)
 	optionlist = optionlistconfig("series")	
-	sortinglist= tk.OptionMenu(SortFrame, choice,*optionlist)
-	sortinglist.pack(side = LEFT)
+	sortinglist.config(value= optionlist)
+	
 
 def FilmsMode():
 	
@@ -199,8 +199,8 @@ def FilmsMode():
 	
 	ShowAllButton.config(text= "VOIR TOUS LES FILMS", command= ShowAllFilms)
 	optionlist = optionlistconfig("films")
-	sortinglist= tk.OptionMenu(SortFrame, choice,*optionlist) 
-	sortinglist.pack(side = LEFT)
+	sortinglist.config(value =optionlist) 
+	
 
 def GamesMode():
 	global ResultGrid, optionlist
@@ -211,8 +211,8 @@ def GamesMode():
 	
 	ShowAllButton.config(text= "VOIR TOUS LES JEUX", command= ShowAllGames)
 	optionlist = optionlistconfig("games")
-	sortinglist= tk.OptionMenu(SortFrame, choice,*optionlist)
-	sortinglist.pack()
+	sortinglist.config(value = optionlist)
+	
 
 	
 def updaterecord(tableNumber):
@@ -331,15 +331,12 @@ def optionlistconfig(_mode):
 
 	if _mode == "series": 
 		_optionlist = ["Trier par Titre", "Trier par Date de sortie", "Trier par épisodes", 'Trier par Saisons']
-		return optionlist
+		return _optionlist
 	elif _mode == "films": 
-		_optionlist = ["Trier par Titre", "Trier par Date de sortie", "Trier par genre", "Tier par Box Office"]
-		
-		
+		_optionlist = ["Trier par Titre", "Trier par Date de sortie", "Trier par genre", "Tier par Box Office"]		
 		return _optionlist
 
-	elif _mode == "games":
-		
+	elif _mode == "games":	
 		_optionlist = ["Trier par Titre","Trier par Date de sortie", "Trier par Editeur", "Trier par Développeur", "Trier par Genrde"] 
 			
 
@@ -355,6 +352,10 @@ choice = tk.StringVar()
 
 
 SortFrame = tk.Frame(WindowFrame)
+options = optionlistconfig("series")
+option = tk.StringVar()
+sortinglist = tk.OptionMenu(SortFrame, option, *options)
+sortinglist.pack(side=LEFT)
 
 
 WindowFrame.pack(side = TOP, fill = BOTH)
