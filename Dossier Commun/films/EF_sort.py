@@ -5,8 +5,10 @@ from Execute_Req import AllUsersConnection
 def SortFilms(header):
 	conn= AllUsersConnection()
 	cursor= conn.cursor()
-	cursor.execute("SELECT * from Films ORDER BY %s" % (header))
-	print(cursor.fetchall())
+	cursor.execute("select films.IdFilm, films.Titre, genrefilm.nom, films.realisateur, films.datesortie, films.boxoffice from films inner join genrefilm on films.genre = genrefilm.idgenre order by %s" % (header))
+	display = cursor.fetchall()
+	for film in display:
+		print(f"ID Film : {film[0]} | Titre : {film[1]} | Genre : {film[2]} | Réalisateur : {film[3]} | Date de Sortie {film[4]} | Box office : {film[5]} ")
 
 def DisplaySortingMenu():
 	_menuSentence = "\n EqleFlix/Films \n Trier par: \n 1- Titre \n 2- Genre \n 3- Réalisateur \n 4- Date de sortie \n 5- Box office \n 6- Pays \n  \"Q\"-	Pour quitter  \n Votre choix : "
@@ -39,7 +41,7 @@ def DisplaySortingMenu():
 			_userChoice = input( _menuSentence).lower()
 	#else:
 		#DisplayFilmsMenu
-
+1
 
 DisplaySortingMenu()
 

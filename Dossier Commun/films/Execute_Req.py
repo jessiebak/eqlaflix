@@ -142,7 +142,7 @@ def Execute_Req( _req, _header = 0, _headerToPrint = 0):
                 print(printLine)   
             lineNum += 1
     except  :
-        print("une erreur s'est produite dans le script  de la fonction Execute_Req du fichier execute_Req")
+        print("une erreur s'est produite dans le script  principal")
     finally: 
         if(connection.is_connected()):
             connection.close()
@@ -187,7 +187,7 @@ def Execute_ReqRandom( _req, _header = 0, _headerToPrint = 0):
                 print(printLine)   
             lineNum += 1
     except  :
-        print("une erreur s'est produite dans le script  Execute_ReqRandom du fichier execute_Req")
+        print("une erreur s'est produite dans le script  principal")
     finally: 
         if(connection.is_connected()):
             connection.close()
