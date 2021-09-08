@@ -1,40 +1,43 @@
 import mysql.connector as MC
 from Execute_Req import AllUsersConnection
-from jeux.EqlaFlixFilms import *
+#from EqlaFlixFilms import *
 
 def SortFilms(header):
 	conn= AllUsersConnection()
 	cursor= conn.cursor()
-	cursor.execute("SELECT * from Series ORDER BY ?",header)
-	print(cursor.fetchall())
+	cursor.execute("select * from series order by %s" % (header))
+	display = cursor.fetchall()
+	for film in display:
+		print(f"ID Serie : {film[0]} | Titre : {film[1]} | Date de sortie : {film[3]} | Episodes : {film[4]} | Saisons: {film[5]} | Description : {film[6]} ")
 
 def DisplaySortingMenu():
-	_menuSentence = "\n EqleFlix/Séries \n Trier par: \n 1- Titre (VF) \n 2- Titre (VO) \n 3- Date de sortie \n 4- Nombre d'épisodes \n 5- Nombre de saison \n  \"Q\"-	Pour quitter  \n Votre choix : "
+	_menuSentence = "\n EqleFlix/Films \n Trier par: \n 1- Titre \n 2- Date de Sortie \n 3- Nombre d'épisodes \n 4- Nombre de saisons \n \"Q\"-	Pour quitter  \n Votre choix : "
 	_userChoice = input(_menuSentence).lower()
 	while _userChoice!="q":
 		try:
 			_userChoice= int(_userChoice)
 			if _userChoice==1:
-				header= "TitreVF"
+				header= "Serie_TitreVF"
 				SortFilms(header)
 			elif _userChoice==2:
-				header= "TitreVO"
+				header= "Serie_DateSortie"
 				SortFilms(header)
 			elif _userChoice==3:
-				header= "DateSortie"
+				header= "Series_Episode"
 				SortFilms(header)
 			elif _userChoice==4:
-				header= "Episode"
-				SortFilms(header)
-			elif _userChoice==5:
-				header= "Saisons"
+				header= "Serie_Saisons"
 				SortFilms(header)
 			else: 
 				_userChoice = input("\n Votre choix est incorrect; Veuillez entrer un choix valide. \n" + _menuSentence ).lower()
 			_userChoice = input(_menuSentence).lower()
 		except:
 			_userChoice = input( _menuSentence).lower()
-	else:
-		DisplayFilmsMenu
+	#else:
+		#DisplayFilmsMenu
+1
 
-DisplayFilmsMenu()
+DisplaySortingMenu()
+
+# SortFilms("titre")
+

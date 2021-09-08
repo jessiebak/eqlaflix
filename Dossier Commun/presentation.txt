@@ -1,7 +1,16 @@
+- Présenter l'équipe et les rôles de chacun
+- Explication du projet et des objectifs principaux
+- Explication de ce qu'on a fait en plus (Bonus rajoutés) 
+- Présentation du résultat et test avec ET sans synthèse vocale
+- Ce qui n'a pas été fait, ce qui aurait pu être mieux fait, ce dont vous êtes fier.
+- Retour d'expérience : difficultés, temps, séparation des parties, anecdotes
+- A long terme: ce qu'on rajouterais au projet pour le développer
+- Mettre le logiciel à disposition sur PC pour le faire tester
 
 I-  introduction :
-    a-   d'où nous vient l'idée du projet ? 
-    b-   qu'elle problèmatique souhaitons nous résoudre ? 
+    a-  Présentation de l'équipe et des rôles de chacun  
+    b-  D'où nous vient l'idée du projet ? 
+    c-  Quelle problèmatique souhaitons nous résoudre ? 
 II- mise en oeuvre 
     a-  aléatoire-  organisation du travail 
     b-  outils utiliser et la raison de leurs utilisation? 
