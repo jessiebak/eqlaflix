@@ -181,38 +181,53 @@ def TreeviewGames(ResultGrid):
 
 	
 def Seriesmode():
-	global ResultGrid
-	ResultGrid.destroy()
-	ResultGrid = createGrid()
+	global ResultGrid, optionlist
+	for item in ResultGrid.get_children():
+		ResultGrid.delete(item)
+	
 	ShowAllButton.config(text="VOIR TOUTES LES SERIES", command= ShowAllseries)
-		
+	optionlist = optionlistconfig("series")	
+	sortinglist= tk.OptionMenu(SortFrame, choice,*optionlist)
+	if sortinglist.winfo_ismapped()== False:
+		sortinglist.pack(side = LEFT)
 
 def FilmsMode():
 	
-	global ResultGrid
-	ResultGrid.destroy()
-	ResultGrid = createGrid()
+	global ResultGrid, optionlist
+	for item in ResultGrid.get_children():
+		ResultGrid.delete(item)
+	
+	
 	ShowAllButton.config(text= "VOIR TOUS LES FILMS", command= ShowAllFilms)
+	optionlist = optionlistconfig("films")
+	sortinglist= tk.OptionMenu(SortFrame, choice,*optionlist) 
+	if sortinglist.winfo_ismapped() == False: 
+		sortinglist.pack(side = LEFT)
+
 def GamesMode():
-	global ResultGrid
-	ResultGrid.destroy()
-	ResultGrid = createGrid()
+	global ResultGrid, optionlist
+	for item in ResultGrid.get_children():
+		ResultGrid.delete(item)
+	
+	
+	
 	ShowAllButton.config(text= "VOIR TOUS LES JEUX", command= ShowAllGames)
+	optionlist = optionlistconfig("games")
+	sortinglist= tk.OptionMenu(SortFrame, choice,*optionlist)
+	if sortinglist.winfo_ismapped()== False:
+		sortinglist.pack(side = LEFT)
+
 	
 def updaterecord(tableNumber):
 	global searchEntry, ResultGrid
 	searching= tk.StringVar()
 	searching = searchEntry.get() 
-	# searchEntry.configure(textvariable=searching)
-	# searchEntry = tk.Variable()
-	# searchEntry.trace_add(mode=["write", "read", "unset"], callback=print2)
-	
-	
+
 	curseur = connexion.cursor()
 	
 	
-	for record in ResultGrid.get_children(): 
-		ResultGrid.delete(record)
+	# for record in ResultGrid.get_children(): 
+	# 	ResultGrid.delete(record)
 	
 	
 	if tableNumber == 1: 
@@ -250,14 +265,8 @@ def updaterecord(tableNumber):
 	
 	
 	# ResultGrid.after(1000,lambda :  updaterecord(tableNumber))
-def print2():
-	print("Hello World")
 
-def createGrid():
-
-	ResultGrid = ttk.Treeview(resultbox, height= root.winfo_screenheight())
-	ResultGrid.pack(fill= BOTH, expand= True)
-	return ResultGrid
+	
 
 	 
 	
@@ -317,16 +326,36 @@ except ProgrammingError:
 		pass
 
 
-	
+def optionlistconfig(_mode): 
 
+	if _mode == "series": 
+		_optionlist = ["Trier par Titre", "Trier par Date de sortie", "Trier par épisodes", 'Trier par Saisons']
+		return optionlist
+	elif _mode == "films": 
+		_optionlist = ["Trier par Titre", "Trier par Date de sortie", "Trier par genre", "Tier par Box Office"]
+		
+		
+		return _optionlist
+
+	elif _mode == "Games":
+		
+		_optionlist = ["Trier par Titre","Trier par Date de sortie", "Trier par Editeur", "Trier par Développeur", "Trier par Genrde"] 
+			
+
+
+
+		
+
+
+
+global sortinglist 
 
 choice = tk.StringVar()
-optionlist= ["Trier par Nom", "Trier par Date de sortie"]
+
+
 SortFrame = tk.Frame(WindowFrame)
-sortinglist= tk.OptionMenu(SortFrame, choice,*optionlist)
-choice.set(optionlist[0]) 
-sortinglist.config(font=("Helvetica", 15), bg=appBG2, fg="white")
-sortinglist.pack(side=LEFT)
+
+
 WindowFrame.pack(side = TOP, fill = BOTH)
 FrameH1.pack(side=TOP, fill= Y)
 MenuFrame.pack(fill= Y)
@@ -335,10 +364,14 @@ resultbox.pack(side= TOP, anchor = CENTER, fill= BOTH, expand= True)
 TitleH1.pack()
 TitleH2.pack()
 
+# 
+
+
 #Creating Treeview
 global ResultGrid 
-ResultGrid = createGrid()
-
+ResultGrid = ttk.Treeview(resultbox, height= root.winfo_screenheight())
+ResultGrid.pack(fill= BOTH, expand= True)
+	
 
 #End of app method, close window and SQL server
 
