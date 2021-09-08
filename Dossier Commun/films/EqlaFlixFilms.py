@@ -6,13 +6,14 @@ from films import EF_AddFilm as EFA
 from films import EF_Delete as EFDel
 from films import EF_Search as EFS
 from films import EF_modify as EFM
+from films import EF_sort as EFSo
 
 os.system('cls')
 
 
 # cette fonction gére le menu principal des films 
 def DisplayFilmsMenu(): 
-    _menuSentence = "\n EqleFlix/Films \n 1- Afficher \n 2- Modifier \n 3- Ajouter \n 4- Supprimer \n 5- Rechercher \n 6- Affichage Aléatoire \n  \"Q\"-	Pour quitter  \n Votre choix : "
+    _menuSentence = "\n EqleFlix/Films \n 1- Afficher \n 2- Modifier \n 3- Ajouter \n 4- Supprimer \n 5- Rechercher \n 6- Affichage Aléatoire \n 7- Tri \n  \"Q\"-	Pour quitter  \n Votre choix : "
     _userChoice = input(_menuSentence).lower()
     os.system('cls')
     while _userChoice != "q":
@@ -37,6 +38,8 @@ def DisplayFilmsMenu():
             elif _userChoice == 6: 
                 _filmHeadertoPrint = EFD.FilmHeaderToPrint()
                 EFD.Execute_ReqRandom(EFD.DisplayOptionsReq(_filmHeadertoPrint), EFD.filmHeader, _filmHeadertoPrint)
+            elif _userChoice == 7: 
+                EFSo.DisplaySortingMenu()
             else: 
                 _userChoice = input("\n Votre choix est incorrect; Veuillez entrer un choix valide. \n" + _menuSentence ).lower()
                 os.system('cls')
