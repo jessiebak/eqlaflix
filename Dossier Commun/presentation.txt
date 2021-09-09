@@ -31,3 +31,36 @@ V-  recap et synthèse des travaux
         -   les manquements ? 
         -   solutions que nous proposons ? 
         -   les fonctions à rajouter dans le futur ? 
+
+
+
+II-PRESENTATION DE LA CONSOLE :
+
+    1-  Avant habillage graphique, les programmes en général sont développés et testés dans la console: 
+    2-  je m'appelle tcheuyassi isaac et je vais vous présenter les résultats de notre programme via la console: 
+
+    notre programme possède environ 15 fonctionnalité et sous sous-fonctionnalités par type de média 
+
+    Et toutes ces fonctionnalités interagissent(sont gérées par des fonctions) ensemble via des fonctions (pour le coup, nous avons écrit  environ 25 fonctions par types de média)
+
+je vous propose tester ensemble quelques unes des multiples fonctionnalités que maxime à bien voulu nous lister tout à l'heure. parmi lesquelles :  (affichage - ajout - Recherche - tri )
+
+Sans plus tarder, choisissons un des trois types média pour commencer les tests.
+
+pour suaver les informations relatives à ce média,mon camarade à mentionné tout à l'heure que nous avons implémenter une bd mysql
+pour les flilms en particulier nous avons créer deux tables (une qui listera les différents genres de films et une autre table pour le reste des champs utilisés pour les films )(nous les avons liés). 
+
+vu que nous avons environ une cinquantaine d'enregistrement dans notre bdd, nous allons ocmmencer par tous les afiicher 
+(dans cette option d'affichage, nous donnons la latitude à notre utilisateur de choisir lui mmee les champs qu'il souhaite afficher et tout ceci dans l'ordre de son choix )->pour améliorer l'expérience utilisateur, notre programme intègre: 
+    -   la gestion des erreurs ( cela signifie ici que les valeurs autres que celles demandées ici ne font pas buguer notre programme mais signale à l'utilisateur qu'il a éffectuer un choix incorrect. )
+    -   notre programme intègre une facilité de validation sans pareil, la facilité de validation (c a d "en pressant la touche entrer sans aucun choix , fait comprendre à notre programme que vous choisissez de tout afficher )
+    -   et si un choix est effectuer au préalable, le programme comprend immédiatement que vous désirez passer immmédiatement à l'affichage
+    -   pour terminer, notre programme n'est pas sensible à la casse (nous avons délibérement choisi de tolérer que l'utilisateur en minuscul et en majuscule )
+
+
+
+
+
+
+Pour améliorer d'avantage l'expérience utilisateur, nous avons mis en oeuvre une interface graphique qui présente une net amélioration et ues avantages par rapport à la console que je laisse le soin à mon camarade jessie de vous présenter  
+
