@@ -187,8 +187,8 @@ def Seriesmode():
 	
 	ShowAllButton.config(text="VOIR TOUTES LES SERIES", command= ShowAllseries)
 	optionlist = optionlistconfig("series")	
-	sortinglist= tk.OptionMenu(SortFrame, choice,*optionlist)
-	sortinglist.pack(side = LEFT)
+	sortinglist.configure(value= optionlist)
+	
 
 def FilmsMode():
 	
@@ -199,8 +199,8 @@ def FilmsMode():
 	
 	ShowAllButton.config(text= "VOIR TOUS LES FILMS", command= ShowAllFilms)
 	optionlist = optionlistconfig("films")
-	sortinglist= tk.OptionMenu(SortFrame, choice,*optionlist) 
-	sortinglist.pack(side = LEFT)
+	sortinglist.configure(value = optionlist) 
+	
 
 def GamesMode():
 	global ResultGrid, optionlist
@@ -211,8 +211,9 @@ def GamesMode():
 	
 	ShowAllButton.config(text= "VOIR TOUS LES JEUX", command= ShowAllGames)
 	optionlist = optionlistconfig("games")
-	sortinglist= tk.OptionMenu(SortFrame, choice,*optionlist)
-	sortinglist.pack()
+	sortinglist.configure(value = optionlist)
+
+
 
 	
 def updaterecord(tableNumber):
@@ -228,13 +229,15 @@ def updaterecord(tableNumber):
 	
 	
 	if tableNumber == 1: 
+		_order = CheckOrder("series")
 		
-		req = "select * from series where Serie_TitreVF like %s"
+		req = "select * from series where Serie_TitreVF like %s" + _order
 		data = "%" + searching +'%',
 
 		curseur.execute(req, data)
 		response = curseur.fetchall()
-		updatebutton.config(command = lambda : updaterecord(1))
+		updatebutton.configure(command = lambda : updaterecord(1))
+		searchEntry.bind_all("<Enter>", lambda : updaterecord(1))
 		for i, n in enumerate(response):
 			ResultGrid.insert(parent="",index=i, iid=i, values=(n[1], n[3], n[4], n[5],n[6]), tags=n[1])
 	elif tableNumber == 2:
@@ -244,7 +247,7 @@ def updaterecord(tableNumber):
 		curseur.execute(req, data)
 		response = curseur.fetchall()
 		updatebutton.config(command = lambda : updaterecord(2))
-
+		searchEntry.bind("<Enter>", lambda : updaterecord(2))
 		for i, n in enumerate(response):
 			ResultGrid.insert(parent="",index=i, iid=i, values=(n[1], n[4], n[2], n[3],n[5]), tags=n[1])
 	
@@ -255,6 +258,7 @@ def updaterecord(tableNumber):
 		curseur.execute(req, data)
 		response = curseur.fetchall()
 		updatebutton.config(command = lambda : updaterecord(3))
+		searchEntry.bind("<Enter>", lambda : updaterecord(3))
 	
 		for i, n in enumerate(response):
 				ResultGrid.insert(parent="",index=i, iid=i, values=(n[1], n[2], n[3], n[4],n[5]), tags=n[1])
@@ -331,30 +335,66 @@ def optionlistconfig(_mode):
 
 	if _mode == "series": 
 		_optionlist = ["Trier par Titre", "Trier par Date de sortie", "Trier par épisodes", 'Trier par Saisons']
-		return optionlist
+		return _optionlist
 	elif _mode == "films": 
-		_optionlist = ["Trier par Titre", "Trier par Date de sortie", "Trier par genre", "Tier par Box Office"]
-		
-		
+		_optionlist = ["Trier par Titre", "Trier par Date de sortie", "Trier par genre", "Tier par Box Office", "Trier par Réalisateur"]		
 		return _optionlist
 
-	elif _mode == "games":
+	elif _mode == "games":	
+		_optionlist = ["Trier par Titre","Trier par Date de sortie", "Trier par Editeur", "Trier par Développeur", "Trier par Catégorie"] 
+		return _optionlist	
+
+
+def CheckOrder(_caterogie): 
+
+
+
+	if _caterogie == "series": 
+		if option_value.get() == options[0]:
+			return "order by Serie_TitreVF"
+		elif option_value.get() == options[1]: 
+			return "order by Serie_DateSortie DESC"
+		elif option_value.get() == options[2]: 
+			return "order by Series_Episode"
+		elif option_value.get() == options [3]: 
+			return "order by Serie_Saisons"
+	elif _caterogie == "films":
+		if option_value.get() == options[0]:
+			return "order by Titre"
+		elif option_value.get() == options[1]: 
+			return "order by DateSortie DESC"
+		elif option_value.get() == options[2]: 
+			return "order by Genre"
+		elif option_value.get() == options [3]: 
+			return "order by BoxOffice"
+		elif option_value.get() == options [4]: 
+			return "order by Realisateur"
+	elif _caterogie == "games":
+		if option_value.get() == options[0]:
+			return "order by Videogames_Titre"
+		elif option_value.get() == options[1]: 
+			return "order by Videogames_DateSortie DESC"
+		elif option_value.get() == options[2]: 
+			return "order by Vidéogames_Développeur"
+		elif option_value.get() == options [3]: 
+			return "order by Vidéogames_Categorie"
+
+
 		
-		_optionlist = ["Trier par Titre","Trier par Date de sortie", "Trier par Editeur", "Trier par Développeur", "Trier par Genrde"] 
-			
 
 
 
-		
-
-
-
-global sortinglist 
+global sortinglist, option_value, options
 
 choice = tk.StringVar()
 
 
 SortFrame = tk.Frame(WindowFrame)
+options = optionlistconfig("series")
+option_value = tk.StringVar()
+sortinglist = tk.OptionMenu(SortFrame, option_value, *options) 
+option_value.set(options[0])
+sortinglist.pack(side=LEFT)
 
 
 WindowFrame.pack(side = TOP, fill = BOTH)
