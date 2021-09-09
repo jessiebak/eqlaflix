@@ -10,54 +10,37 @@ import tkinter.ttk as ttk
 from mysql.connector import connection
 from mysql.connector.errors import ProgrammingError 
 
-
-#SQL Connection
-# connexion = MC.connect(host= 'localhost', database= 'Eqlaflix', user = 'root', password = 'python4life')
-# curseur = connexion.cursor()
-
 def ShowAllseries():
 	   
 	TreeviewSeries(ResultGrid)
-	
-	curseur = connexion.cursor()
-	req = "select * from series"
-	curseur.execute(req)
-	response = curseur.fetchall()
-	
-	for i, n in enumerate(response):
-		ResultGrid.insert(parent="",index=i, iid=i, values=(n[1], n[3], n[4], n[5],n[6]), tags=n[1])
-	
+	searchEntry.delete(0,END)
 	updaterecord(1)
-
-		
+	DisplayButtons()
+	
 	
 def ShowAllFilms():
 	TreeviewFilms(ResultGrid)
-	curseur = connexion.cursor()
-	req = "select films.IdFilm, films.Titre, genrefilm.nom, films.realisateur, films.datesortie, films.boxoffice from films inner join genrefilm on films.genre = genrefilm.idgenre "
-	curseur.execute(req)
-	response = curseur.fetchall()
-	
-	for i, n in enumerate(response):
-		ResultGrid.insert(parent="",index=i, iid=i, values=(n[1], n[4], n[2], n[3],n[5]), tags=n[1])
-	
+	searchEntry.delete(0,END)
 	updaterecord(2)
-
-
+	DisplayButtons()
 		
 def ShowAllGames():
 	TreeviewGames(ResultGrid)
-	
-	curseur = connexion.cursor()
-	req = "select * from videogames"
-	curseur.execute(req)
-	response = curseur.fetchall()
-	
-	for i, n in enumerate(response):
-			ResultGrid.insert(parent="",index=i, iid=i, values=(n[1], n[2], n[3], n[4],n[5]), tags=n[1])
-
+	searchEntry.delete(0,END)
 	updaterecord(3)
+	DisplayButtons()
 
+def DisplayButtons():
+	if resultbox.winfo_ismapped()== False: 
+		resultbox.pack(side= TOP, anchor = CENTER, fill= BOTH, expand= True)
+	if sortinglist.winfo_ismapped() == False:
+		sortinglist.pack(side= LEFT)
+	if updatebutton.winfo_ismapped() == False:
+		updatebutton.pack(side=LEFT)
+	if ShowAllButton.winfo_ismapped() == False: 
+		ShowAllButton.pack(side = LEFT,fill= Y)
+	if searchEntry.winfo_ismapped() == False: 
+		searchEntry.pack(fill=Y)
 
 def TreeviewSeries(ResultGrid):
 
@@ -85,10 +68,8 @@ def TreeviewSeries(ResultGrid):
 	ResultGrid.configure(xscrollcommand=scrollingX.set, yscrollcommand=scrollingY.set)
 	scrollingX.config(command=ResultGrid.xview)
 	scrollingY.config(command=ResultGrid.yview)
-
 	
 	ResultGrid.pack(fill= BOTH, expand= True)
-
 
 	#adding Style 
 	style = ttk.Style()
@@ -122,7 +103,6 @@ def TreeviewFilms(ResultGrid):
 	scrollingX.config(command=ResultGrid.xview)
 	scrollingY.config(command=ResultGrid.yview)
 
-
 	ResultGrid.pack(fill= BOTH, expand= True)
 
 	#adding Style 
@@ -131,7 +111,6 @@ def TreeviewFilms(ResultGrid):
 	style.configure("Treeview",background= "light goldenrod yellow", foreground= "white", fieldbackground="#1F1F1F", rowheight=35, color="white", font=("Helvetica",10))
 	style.map("Treeview", background=[("selected", appBG2)])
 	
-
 def TreeviewGames(ResultGrid):
 	ResultGrid["columns"]= ("Titre", "DateSortie", "Développeur", "Editeur", "Catégorie")
 	ResultGrid.column("#0", width=0, stretch = NO)
@@ -158,7 +137,7 @@ def TreeviewGames(ResultGrid):
 	scrollingX.config(command=ResultGrid.xview)
 	scrollingY.config(command=ResultGrid.yview)
 
-		
+	
 	ResultGrid.pack(fill= BOTH, expand= True)
 	
 	#adding Style 
@@ -166,7 +145,6 @@ def TreeviewGames(ResultGrid):
 	style.theme_use("default")
 	style.configure("Treeview",background= "orchid2", foreground= "white", fieldbackground="#1F1F1F", rowheight=35, color="white", font=("Helvetica",10))
 	style.map("Treeview", background=[("selected", appBG2)])
-
 	
 def Seriesmode():
 	global ResultGrid, options
@@ -179,6 +157,8 @@ def Seriesmode():
 	sortinglist['menu'].delete(0,END)
 	for choice in options:
 		sortinglist["menu"].add_command(label=choice, command=tk._setit(option_value, choice))
+	updatebutton.config(bg="sky blue2", fg= 'black')
+	ShowAllseries()
 def FilmsMode():
 	
 	global ResultGrid, options
@@ -192,10 +172,11 @@ def FilmsMode():
 	sortinglist['menu'].delete(0,END)
 	for choice in options:
 		sortinglist["menu"].add_command(label=choice, command=tk._setit(option_value, choice))
-	
+	updatebutton.config(bg="lightgoldenrod", fg= 'black')
+	ShowAllFilms()
 
 def GamesMode():
-	global ResultGrid, optionlist
+	global ResultGrid, options
 	for item in ResultGrid.get_children():
 		ResultGrid.delete(item)
 	
@@ -205,9 +186,8 @@ def GamesMode():
 	sortinglist['menu'].delete(0,END)
 	for choice in options:
 		sortinglist["menu"].add_command(label=choice, command=tk._setit(option_value, choice))
-
-
-	
+	updatebutton.config(bg="hot pink", fg= 'black')
+	ShowAllGames()
 def updaterecord(tableNumber):
 	global searchEntry, ResultGrid
 	searching= tk.StringVar()
@@ -217,7 +197,6 @@ def updaterecord(tableNumber):
 	
 	for record in ResultGrid.get_children(): 
 		ResultGrid.delete(record)
-	
 	
 	if tableNumber == 1: 
 		_order = CheckOrder("series")
@@ -229,8 +208,10 @@ def updaterecord(tableNumber):
 		response = curseur.fetchall()
 		updatebutton.configure(command = lambda : updaterecord(1))
 		searchEntry.bind_all("<Enter>", lambda : updaterecord(1))
+
 		for i, n in enumerate(response):
 			ResultGrid.insert(parent="",index=i, iid=i, values=(n[1], n[3], n[4], n[5],n[6]), tags=n[1])
+	
 	elif tableNumber == 2:
 		_order = CheckOrder("films")
 		req = "select films.IdFilm, films.Titre, genrefilm.nom, films.realisateur, films.datesortie, films.boxoffice from films inner join genrefilm on films.genre = genrefilm.idgenre where films.Titre like %s" + _order
@@ -245,84 +226,16 @@ def updaterecord(tableNumber):
 	elif tableNumber == 3:	
 
 		_order = CheckOrder("games")
-		req = "select * from videogames  where videogames_Titre like %s" + _order 
+		req = "select * from videogames where videogames_Titre like %s " + _order 
 		data = "%" + searching + '%', 
 		curseur.execute(req, data)
 		response = curseur.fetchall()
 		updatebutton.config(command = lambda : updaterecord(3))
-		# searchEntry.bind("<Enter>", lambda : updaterecord(3))
+		searchEntry.bind("<Enter>", lambda : updaterecord(3))
 	
 		for i, n in enumerate(response):
-				ResultGrid.insert(parent="",index=i, iid=i, values=(n[1], n[2], n[3], n[4],n[5]), tags=n[1])
-				ResultGrid.selection_set(ResultGrid.insert("", "end", values=(searching, 0)))
-	
-	
-	
-
-	
-	
-	# ResultGrid.after(1000,lambda :  updaterecord(tableNumber))
-
-	
-
-	 
-	
-	
-
-#creating Window
-root = tk.Tk()
-root.title("Eqlaflix - Votre plafeforme d'information Films, jeux et séries")
-root.geometry("1920x1020")
-appBG, appBG2, policeBG ="black", "red", "white"
-appFont = ("Helvetica", 25)
-root.config(bg= appBG)
-RatioMainbox, RatioMainboxHeight = 4/6, 1/10
-padding = 20
-appfont =("Helvetica",26)
-Bdheight = "5px"
-
-WindowFrame= tk.Frame(root, width= 1280, height= 720, bg= appBG)
-FrameH1= tk.Frame(WindowFrame, width= WindowFrame.winfo_width()*RatioMainbox, height= WindowFrame.winfo_height()*RatioMainboxHeight, bg= appBG2, pady= padding, borderwidth=Bdheight)
-TitleH1 =tk.Label(FrameH1, text= "EQLAFLIX", font= appFont, bg= appBG2, fg=policeBG, padx=padding, borderwidth=Bdheight)
-TitleH2 =tk.Label(FrameH1, text= "Votre plateforme d'information sur les films, séries et jeux vidéos", font= appFont, bg= appBG2, fg=policeBG, padx=padding, borderwidth=Bdheight)
-  
-
-
-MenuFrame = tk.Frame(WindowFrame, width= root.winfo_screenwidth(), bg="black")
-ShowAllButton= tk.Button(MenuFrame, text= "VOIR TOUTES LES SERIES", command= lambda : [f()for f in [ShowAllseries]] , font = ("Helvetica", 15))
-sideBar=tk.Frame(root, bg=appBG, width= int(WindowFrame.winfo_width()/6), height= int(WindowFrame.winfo_height()))
-sideBar2=tk.Frame(root, bg=appBG, width= int(WindowFrame.winfo_width()/6), height= int(WindowFrame.winfo_height()))
-resultbox = tk.Frame(root, width=(WindowFrame.winfo_width()- sideBar.winfo_width()), height= root.winfo_screenheight() -WindowFrame.winfo_height()- MenuFrame. winfo_width(), borderwidth=Bdheight, bg= "black")
-
-
-
-SeriesPanelButton = tk.Button(sideBar,text="Séries", font= appfont, fg= policeBG, bg= appBG, height=int(sideBar.winfo_height()/3), command= Seriesmode )
-
-#Right buttons panel
-
-sideBar.pack(fill = Y, side=LEFT, expand= True)
-
-sideBar2.pack(fill = Y, side=RIGHT, expand= True)
-SeriesPanelButton.pack(expand= True, side=TOP, fill= BOTH)
-FilmPanelButton = tk.Button(sideBar,text="Film", font= appfont, fg= policeBG, bg= appBG, height=int(sideBar.winfo_height()/3), command= FilmsMode )
-FilmPanelButton.pack(expand= True, fill= BOTH)
-GamePanelButton = tk.Button(sideBar,text="Jeux Vidéo", font= appfont, fg= policeBG, bg= appBG, height=int(sideBar.winfo_height()/3), command= GamesMode )
-GamePanelButton.pack(expand= True,side = BOTTOM,fill= BOTH)
-ShowAllButton.pack(side= LEFT) 	
-global searchEntry
-searchEntry= tk.Entry(MenuFrame, font=appFont)
-searchEntry.pack(fill= Y)
-
-global connexion 
-try : 
-	connexion = MC.connect(database="Eqlaflix", password= "isaac", user= "root")
-except ProgrammingError: 
-	try: 
-		connexion = MC.connect(database="Eqlaflix", password= "python4life", user= "root")
-	except:
-		pass
-
-
+			ResultGrid.insert(parent="",index=i, iid=i, values=(n[1], n[2], n[3], n[4],n[5]), tags=n[1])
+				
 def optionlistconfig(_mode): 
 
 	if _mode == "series": 
@@ -331,15 +244,12 @@ def optionlistconfig(_mode):
 	elif _mode == "films": 
 		_optionlist = ["Trier par Titre", "Trier par Date de sortie (Le plus récent)", "Trier par Date de sortie (Le plus ancien)", "Trier par genre", "Tier par Box Office", "Trier par Réalisateur"]		
 		return _optionlist
-
 	elif _mode == "games":	
-		_optionlist = ["Trier par Titre","Trier par Date de sortie", "Trier par Editeur", "Trier par Développeur", "Trier par Catégorie"] 
+		_optionlist = ["Trier par Titre","Trier par Date de sortie (plus récent)", "Trier par Date de sortie (plus ancien)", "Trier par Développeur", "Trier par Editeur", "Trier par Catégorie"] 
 		return _optionlist	
 
 
 def CheckOrder(_categorie): 
-
-
 
 	if _categorie == "series": 
 		if option_value.get() == options[0]:
@@ -375,12 +285,72 @@ def CheckOrder(_categorie):
 		elif option_value.get() == options[1]: 
 			return "order by Videogames_DateSortie DESC"
 		elif option_value.get() == options[2]: 
+			return "order by Videogames_DateSortie"
+		elif option_value.get() == options[3]: 
 			return "order by Videogames_Développeur"
-		elif option_value.get() == options [3]: 
+		elif option_value.get() == options[4]: 
+			return "order by Videogames_Editeur"
+		elif option_value.get() == options[5]: 
 			return "order by Videogames_Categorie"
+	
+#creating Window
+root = tk.Tk()
+root.title("Eqlaflix - Votre plafeforme d'information Films, jeux et séries")
+root.geometry("1920x1020")
+appBG, appBG2, policeBG ="black", "red", "white"
+appFont = ("Helvetica", 25)
+root.config(bg= appBG)
+RatioMainbox, RatioMainboxHeight = 4/6, 1/10
+padding = 20
+appfont =("Helvetica",26)
+Bdheight = "5px"
+
+WindowFrame= tk.Frame(root, width= 1280, height= 720, bg= appBG)
+FrameH1= tk.Frame(WindowFrame, width= WindowFrame.winfo_width()*RatioMainbox, height= WindowFrame.winfo_height()*RatioMainboxHeight, bg= appBG2, pady= padding, borderwidth=Bdheight)
+TitleH1 =tk.Label(FrameH1, text= "EQLAFLIX", font= appFont, bg= appBG2, fg=policeBG, padx=padding, borderwidth=Bdheight)
+TitleH2 =tk.Label(FrameH1, text= "Votre plateforme d'information sur les films, séries et jeux vidéos", font= appFont, bg= appBG2, fg=policeBG, padx=padding, borderwidth=Bdheight)
 
 
-		
+MenuFrame = tk.Frame(WindowFrame, width= root.winfo_screenwidth(), bg="black")
+ShowAllButton= tk.Button(MenuFrame, text= "VOIR TOUTES LES SERIES", command= lambda : [f()for f in [ShowAllseries]] , font = ("Helvetica", 15))
+sideBar=tk.Frame(root, bg=appBG, width= int(WindowFrame.winfo_width()/6), height= int(WindowFrame.winfo_height()))
+sideBar2=tk.Frame(root, bg=appBG, width= int(WindowFrame.winfo_width()/6), height= int(WindowFrame.winfo_height()))
+resultbox = tk.Frame(root, width=(WindowFrame.winfo_width()- sideBar.winfo_width()), height= root.winfo_screenheight() -WindowFrame.winfo_height()- MenuFrame. winfo_width(), borderwidth=Bdheight, bg= "black")
+
+
+
+SeriesPanelButton = tk.Button(sideBar,text="Séries", font= appfont, fg= policeBG, bg= appBG, height=int(sideBar.winfo_height()/3), command= Seriesmode )
+
+#Right buttons panel
+
+sideBar.pack(fill = Y, side=LEFT, expand= True)
+
+sideBar2.pack(fill = Y, side=RIGHT, expand= True)
+SeriesPanelButton.pack(expand= True, side=TOP, fill= BOTH)
+FilmPanelButton = tk.Button(sideBar,text="Film", font= appfont, fg= policeBG, bg= appBG, height=int(sideBar.winfo_height()/3), command= FilmsMode )
+FilmPanelButton.pack(expand= True, fill= BOTH)
+GamePanelButton = tk.Button(sideBar,text="Jeux Vidéo", font= appfont, fg= policeBG, bg= appBG, height=int(sideBar.winfo_height()/3), command= GamesMode )
+GamePanelButton.pack(expand= True,side = BOTTOM,fill= BOTH)
+
+
+global searchEntry
+searchEntry= tk.Entry(MenuFrame, font=appFont)
+
+
+global connexion 
+try : 
+	connexion = MC.connect(database="Eqlaflix", password= "isaac", user= "root")
+except ProgrammingError: 
+	try: 
+		connexion = MC.connect(database="Eqlaflix", password= "python4life", user= "root")
+	except:
+		try:
+			connexion = MC.connect(database="Eqlaflix", password= "g5gqwagr", user= "root")
+		except ProgrammingError:
+			errorFrame = tk.Frame(WindowFrame, bg= appBG, bd = "5px", highlightbackground="red", highlightthickness="5px")
+			Errorlabel = tk.Label(errorFrame, text= "Impossible de se connecter à la base de données / Mot de passe incorrect ", bg= appBG, fg="white")
+			errorFrame.pack(side = TOP)
+			Errorlabel.pack()
 
 
 
@@ -394,20 +364,19 @@ options = optionlistconfig("series")
 option_value = tk.StringVar()
 sortinglist = tk.OptionMenu(SortFrame, option_value, *options) 
 option_value.set(options[0])
-sortinglist.pack(side=LEFT)
+
 
 
 WindowFrame.pack(side = TOP, fill = BOTH)
 FrameH1.pack(side=TOP, fill= Y)
 MenuFrame.pack(fill= Y)
 SortFrame.pack(side=LEFT)
-resultbox.pack(side= TOP, anchor = CENTER, fill= BOTH, expand= True)
+
 TitleH1.pack()
 TitleH2.pack()
+
 global updatebutton
-updatebutton = tk.Button(WindowFrame, text = "Actualiser", font = appFont)
-updatebutton.pack(side= RIGHT)
-# 
+updatebutton = tk.Button(WindowFrame, text = "Actualiser", font = ("Helvetica", 12), bg="skyBlue2")
 
 
 #Creating Treeview
@@ -417,6 +386,5 @@ ResultGrid.pack(fill= BOTH, expand= True)
 	
 
 #End of app method, close window and SQL server
-
 
 root.mainloop()
