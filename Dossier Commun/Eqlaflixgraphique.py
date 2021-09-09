@@ -9,61 +9,38 @@ import tkinter.ttk as ttk
 
 from mysql.connector import connection
 from mysql.connector.errors import ProgrammingError 
-
-
-#SQL Connection
-# connexion = MC.connect(host= 'localhost', database= 'Eqlaflix', user = 'root', password = 'python4life')
-# curseur = connexion.cursor()
-
+from films.Execute_Req import AllUsersConnection
 def ShowAllseries():
 	   
 	TreeviewSeries(ResultGrid)
-	
-	curseur = connexion.cursor()
-	req = "select * from series"
-	curseur.execute(req)
-	response = curseur.fetchall()
-	
-	for i, n in enumerate(response):
-		ResultGrid.insert(parent="",index=i, iid=i, values=(n[1], n[3], n[4], n[5],n[6]), tags=n[1])
-	
+	searchEntry.delete(0,END)
 	updaterecord(1)
-
-		
+	DisplayButtons()
+	
 	
 def ShowAllFilms():
 	TreeviewFilms(ResultGrid)
-	curseur = connexion.cursor()
-	req = "select films.IdFilm, films.Titre, genrefilm.nom, films.realisateur, films.datesortie, films.boxoffice from films inner join genrefilm on films.genre = genrefilm.idgenre "
-	curseur.execute(req)
-	response = curseur.fetchall()
-	
-	for i, n in enumerate(response):
-		ResultGrid.insert(parent="",index=i, iid=i, values=(n[1], n[4], n[2], n[3],n[5]), tags=n[1])
-	
+	searchEntry.delete(0,END)
 	updaterecord(2)
-
-
+	DisplayButtons()
 		
 def ShowAllGames():
 	TreeviewGames(ResultGrid)
-	
-	curseur = connexion.cursor()
-	req = "select * from videogames"
-	curseur.execute(req)
-	response = curseur.fetchall()
-	
-	for i, n in enumerate(response):
-			ResultGrid.insert(parent="",index=i, iid=i, values=(n[1], n[2], n[3], n[4],n[5]), tags=n[1])
-
+	searchEntry.delete(0,END)
 	updaterecord(3)
+	DisplayButtons()
 
-
-
-def classsify():
-	pass
-	
-	
+def DisplayButtons():
+	if resultbox.winfo_ismapped()== False: 
+		resultbox.pack(side= TOP, anchor = CENTER, fill= BOTH, expand= True)
+	if sortinglist.winfo_ismapped() == False:
+		sortinglist.pack(side= LEFT)
+	if updatebutton.winfo_ismapped() == False:
+		updatebutton.pack(side=LEFT)
+	if ShowAllButton.winfo_ismapped() == False: 
+		ShowAllButton.pack(side = LEFT,fill= Y)
+	if searchEntry.winfo_ismapped() == False: 
+		searchEntry.pack(fill=Y)
 
 def TreeviewSeries(ResultGrid):
 
@@ -83,8 +60,6 @@ def TreeviewSeries(ResultGrid):
 	ResultGrid.heading("Description", text= "Description", anchor = CENTER)
 
 	#linking Scrollbar to Treeview
-
-
 		
 	scrollingX = tk.Scrollbar(resultbox, orient= HORIZONTAL)
 	scrollingY = tk.Scrollbar(resultbox, orient= VERTICAL)
@@ -93,14 +68,8 @@ def TreeviewSeries(ResultGrid):
 	ResultGrid.configure(xscrollcommand=scrollingX.set, yscrollcommand=scrollingY.set)
 	scrollingX.config(command=ResultGrid.xview)
 	scrollingY.config(command=ResultGrid.yview)
-
 	
-
-		
 	ResultGrid.pack(fill= BOTH, expand= True)
-
-
-	
 
 	#adding Style 
 	style = ttk.Style()
@@ -134,7 +103,6 @@ def TreeviewFilms(ResultGrid):
 	scrollingX.config(command=ResultGrid.xview)
 	scrollingY.config(command=ResultGrid.yview)
 
-
 	ResultGrid.pack(fill= BOTH, expand= True)
 
 	#adding Style 
@@ -142,8 +110,7 @@ def TreeviewFilms(ResultGrid):
 	style.theme_use("default")
 	style.configure("Treeview",background= "light goldenrod yellow", foreground= "white", fieldbackground="#1F1F1F", rowheight=35, color="white", font=("Helvetica",10))
 	style.map("Treeview", background=[("selected", appBG2)])
-	pass
-
+	
 def TreeviewGames(ResultGrid):
 	ResultGrid["columns"]= ("Titre", "DateSortie", "Développeur", "Editeur", "Catégorie")
 	ResultGrid.column("#0", width=0, stretch = NO)
@@ -170,7 +137,7 @@ def TreeviewGames(ResultGrid):
 	scrollingX.config(command=ResultGrid.xview)
 	scrollingY.config(command=ResultGrid.yview)
 
-		
+	
 	ResultGrid.pack(fill= BOTH, expand= True)
 	
 	#adding Style 
@@ -178,43 +145,49 @@ def TreeviewGames(ResultGrid):
 	style.theme_use("default")
 	style.configure("Treeview",background= "orchid2", foreground= "white", fieldbackground="#1F1F1F", rowheight=35, color="white", font=("Helvetica",10))
 	style.map("Treeview", background=[("selected", appBG2)])
-
 	
 def Seriesmode():
-	global ResultGrid, optionlist
+	global ResultGrid, options
 	for item in ResultGrid.get_children():
 		ResultGrid.delete(item)
 	
 	ShowAllButton.config(text="VOIR TOUTES LES SERIES", command= ShowAllseries)
-	optionlist = optionlistconfig("series")	
-	sortinglist= tk.OptionMenu(SortFrame, choice,*optionlist)
-	sortinglist.pack(side = LEFT)
-
+	options = optionlistconfig("series")
+	option_value.set(options[0])
+	sortinglist['menu'].delete(0,END)
+	for choice in options:
+		sortinglist["menu"].add_command(label=choice, command=tk._setit(option_value, choice))
+	updatebutton.config(bg="sky blue2", fg= 'black')
+	ShowAllseries()
 def FilmsMode():
 	
-	global ResultGrid, optionlist
+	global ResultGrid, options
 	for item in ResultGrid.get_children():
 		ResultGrid.delete(item)
 	
 	
 	ShowAllButton.config(text= "VOIR TOUS LES FILMS", command= ShowAllFilms)
-	optionlist = optionlistconfig("films")
-	sortinglist= tk.OptionMenu(SortFrame, choice,*optionlist) 
-	sortinglist.pack(side = LEFT)
+	options = optionlistconfig("films")
+	option_value.set(options[0])
+	sortinglist['menu'].delete(0,END)
+	for choice in options:
+		sortinglist["menu"].add_command(label=choice, command=tk._setit(option_value, choice))
+	updatebutton.config(bg="lightgoldenrod", fg= 'black')
+	ShowAllFilms()
 
 def GamesMode():
-	global ResultGrid, optionlist
+	global ResultGrid, options
 	for item in ResultGrid.get_children():
 		ResultGrid.delete(item)
 	
-	
-	
 	ShowAllButton.config(text= "VOIR TOUS LES JEUX", command= ShowAllGames)
-	optionlist = optionlistconfig("games")
-	sortinglist= tk.OptionMenu(SortFrame, choice,*optionlist)
-	sortinglist.pack()
-
-	
+	options = optionlistconfig("games")
+	option_value.set(options[0])
+	sortinglist['menu'].delete(0,END)
+	for choice in options:
+		sortinglist["menu"].add_command(label=choice, command=tk._setit(option_value, choice))
+	updatebutton.config(bg="hot pink", fg= 'black')
+	ShowAllGames()
 def updaterecord(tableNumber):
 	global searchEntry, ResultGrid
 	searching= tk.StringVar()
@@ -222,56 +195,106 @@ def updaterecord(tableNumber):
 
 	curseur = connexion.cursor()
 	
-	
 	for record in ResultGrid.get_children(): 
 		ResultGrid.delete(record)
 	
-	
 	if tableNumber == 1: 
+		_order = CheckOrder("series")
 		
-		req = "select * from series where Serie_TitreVF like %s"
+		req = "select * from series where Serie_TitreVF like %s" + _order
 		data = "%" + searching +'%',
 
 		curseur.execute(req, data)
 		response = curseur.fetchall()
-		updatebutton.config(command = lambda : updaterecord(1))
+		updatebutton.configure(command = lambda : updaterecord(1))
+		searchEntry.bind_all("<Enter>", lambda : updaterecord(1))
+
 		for i, n in enumerate(response):
 			ResultGrid.insert(parent="",index=i, iid=i, values=(n[1], n[3], n[4], n[5],n[6]), tags=n[1])
+	
 	elif tableNumber == 2:
-		
-		req = "select films.IdFilm, films.Titre, genrefilm.nom, films.realisateur, films.datesortie, films.boxoffice from films inner join genrefilm on films.genre = genrefilm.idgenre where films.Titre like %s"
+		_order = CheckOrder("films")
+		req = "select films.IdFilm, films.Titre, genrefilm.nom, films.realisateur, films.datesortie, films.boxoffice from films inner join genrefilm on films.genre = genrefilm.idgenre where films.Titre like %s" + _order
 		data = "%" + searching +'%',
 		curseur.execute(req, data)
 		response = curseur.fetchall()
 		updatebutton.config(command = lambda : updaterecord(2))
-
+		searchEntry.bind("<Enter>", lambda : updaterecord(2))
 		for i, n in enumerate(response):
 			ResultGrid.insert(parent="",index=i, iid=i, values=(n[1], n[4], n[2], n[3],n[5]), tags=n[1])
 	
 	elif tableNumber == 3:	
-		
-		req = "select * from videogames  where Videogames_Titre like %s"
+
+		_order = CheckOrder("games")
+		req = "select * from videogames where videogames_Titre like %s " + _order 
 		data = "%" + searching + '%', 
 		curseur.execute(req, data)
 		response = curseur.fetchall()
 		updatebutton.config(command = lambda : updaterecord(3))
+		searchEntry.bind("<Enter>", lambda : updaterecord(3))
 	
 		for i, n in enumerate(response):
-				ResultGrid.insert(parent="",index=i, iid=i, values=(n[1], n[2], n[3], n[4],n[5]), tags=n[1])
-				ResultGrid.selection_set(ResultGrid.insert("", "end", values=(searching, 0)))
-	
-	
-	
+			ResultGrid.insert(parent="",index=i, iid=i, values=(n[1], n[2], n[3], n[4],n[5]), tags=n[1])
+				
+def optionlistconfig(_mode): 
 
-	
-	
-	# ResultGrid.after(1000,lambda :  updaterecord(tableNumber))
+	if _mode == "series": 
+		_optionlist = ["Trier par Titre", "Trier par Date de sortie (plus récent)","Trier par Date de sortie (plus ancien)" , "Trier par Episode (Le plus)", "Trier par Episodes (Le moins)", 'Trier par Saisons (Le plus)', "Trier par Saison (Le moins)"]
+		return _optionlist
+	elif _mode == "films": 
+		_optionlist = ["Trier par Titre", "Trier par Date de sortie (Le plus récent)", "Trier par Date de sortie (Le plus ancien)", "Trier par genre", "Tier par Box Office", "Trier par Réalisateur"]		
+		return _optionlist
+	elif _mode == "games":	
+		_optionlist = ["Trier par Titre","Trier par Date de sortie (plus récent)", "Trier par Date de sortie (plus ancien)", "Trier par Développeur", "Trier par Editeur", "Trier par Catégorie"] 
+		return _optionlist	
 
-	
 
-	 
+def CheckOrder(_categorie): 
+
+	if _categorie == "series": 
+		if option_value.get() == options[0]:
+			return "order by Serie_TitreVF"
+		elif option_value.get() == options[1]: 
+			return "order by Serie_DateSortie DESC"
+		elif option_value.get() == options[2]: 
+			return "order by Serie_DateSortie"
+		elif option_value.get() == options[3]: 
+			return "order by Series_Episode DESC"
+		elif option_value.get() == options[4]: 
+			return "order by Series_Episode "
+		elif option_value.get() == options [5]: 
+			return "order by Serie_Saisons DESC"
+		elif option_value.get() == options [6]: 
+			return "order by Serie_Saisons"
+	elif _categorie == "films":
+		if option_value.get() == options[0]:
+			return "order by films.Titre"
+		elif option_value.get() == options[1]: 
+			return "order by films.DateSortie DESC"
+		elif option_value.get() == options[2]: 
+			return "order by films.DateSortie"
+		elif option_value.get() == options[3]: 
+			return "order by films.Genre"
+		elif option_value.get() == options [4]: 
+			return "order by films.BoxOffice"
+		elif option_value.get() == options [5]: 
+			return "order by films.Realisateur"
+	elif _categorie == "games":
+		if option_value.get() == options[0]:
+			return "order by Videogames_Titre"
+		elif option_value.get() == options[1]: 
+			return "order by Videogames_DateSortie DESC"
+		elif option_value.get() == options[2]: 
+			return "order by Videogames_DateSortie"
+		elif option_value.get() == options[3]: 
+			return "order by Videogames_Développeur"
+		elif option_value.get() == options[4]: 
+			return "order by Videogames_Editeur"
+		elif option_value.get() == options[5]: 
+			return "order by Videogames_Categorie"
 	
-	
+global connexion 
+connexion = AllUsersConnection()
 
 #creating Window
 root = tk.Tk()
@@ -289,7 +312,6 @@ WindowFrame= tk.Frame(root, width= 1280, height= 720, bg= appBG)
 FrameH1= tk.Frame(WindowFrame, width= WindowFrame.winfo_width()*RatioMainbox, height= WindowFrame.winfo_height()*RatioMainboxHeight, bg= appBG2, pady= padding, borderwidth=Bdheight)
 TitleH1 =tk.Label(FrameH1, text= "EQLAFLIX", font= appFont, bg= appBG2, fg=policeBG, padx=padding, borderwidth=Bdheight)
 TitleH2 =tk.Label(FrameH1, text= "Votre plateforme d'information sur les films, séries et jeux vidéos", font= appFont, bg= appBG2, fg=policeBG, padx=padding, borderwidth=Bdheight)
-  
 
 
 MenuFrame = tk.Frame(WindowFrame, width= root.winfo_screenwidth(), bg="black")
@@ -312,62 +334,38 @@ FilmPanelButton = tk.Button(sideBar,text="Film", font= appfont, fg= policeBG, bg
 FilmPanelButton.pack(expand= True, fill= BOTH)
 GamePanelButton = tk.Button(sideBar,text="Jeux Vidéo", font= appfont, fg= policeBG, bg= appBG, height=int(sideBar.winfo_height()/3), command= GamesMode )
 GamePanelButton.pack(expand= True,side = BOTTOM,fill= BOTH)
-ShowAllButton.pack(side= LEFT) 	
+
+
 global searchEntry
 searchEntry= tk.Entry(MenuFrame, font=appFont)
-searchEntry.pack(fill= Y)
-
-global connexion 
-try : 
-	connexion = MC.connect(database="Eqlaflix", password= "isaac", user= "root")
-except ProgrammingError: 
-	try: 
-		connexion = MC.connect(database="Eqlaflix", password= "python4life", user= "root")
-	except:
-		pass
-
-
-def optionlistconfig(_mode): 
-
-	if _mode == "series": 
-		_optionlist = ["Trier par Titre", "Trier par Date de sortie", "Trier par épisodes", 'Trier par Saisons']
-		return optionlist
-	elif _mode == "films": 
-		_optionlist = ["Trier par Titre", "Trier par Date de sortie", "Trier par genre", "Tier par Box Office"]
-		
-		
-		return _optionlist
-
-	elif _mode == "games":
-		
-		_optionlist = ["Trier par Titre","Trier par Date de sortie", "Trier par Editeur", "Trier par Développeur", "Trier par Genrde"] 
-			
 
 
 
-		
 
 
-
-global sortinglist 
+global sortinglist, option_value, options
 
 choice = tk.StringVar()
 
 
 SortFrame = tk.Frame(WindowFrame)
+options = optionlistconfig("series")
+option_value = tk.StringVar()
+sortinglist = tk.OptionMenu(SortFrame, option_value, *options) 
+option_value.set(options[0])
+
 
 
 WindowFrame.pack(side = TOP, fill = BOTH)
 FrameH1.pack(side=TOP, fill= Y)
 MenuFrame.pack(fill= Y)
 SortFrame.pack(side=LEFT)
-resultbox.pack(side= TOP, anchor = CENTER, fill= BOTH, expand= True)
+
 TitleH1.pack()
 TitleH2.pack()
+
 global updatebutton
-updatebutton = tk.Button(WindowFrame, text = "Actualiser", font = appFont)
-updatebutton.pack(side= RIGHT)
-# 
+updatebutton = tk.Button(WindowFrame, text = "Actualiser", font = ("Helvetica", 12), bg="skyBlue2")
 
 
 #Creating Treeview
@@ -377,6 +375,5 @@ ResultGrid.pack(fill= BOTH, expand= True)
 	
 
 #End of app method, close window and SQL server
-
 
 root.mainloop()
