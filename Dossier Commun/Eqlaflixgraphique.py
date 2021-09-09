@@ -1,6 +1,6 @@
 
 
-
+import os
 import mysql.connector as MC 
 import tkinter as tk
 from tkinter.constants import *
@@ -317,9 +317,22 @@ Bdheight = "5px"
 
 WindowFrame= tk.Frame(root, width= 1280, height= 720, bg= appBG)
 FrameH1= tk.Frame(WindowFrame, width= WindowFrame.winfo_width()*RatioMainbox, height= WindowFrame.winfo_height()*RatioMainboxHeight, bg= appBG2, pady= padding, borderwidth=Bdheight)
-TitleH1 =tk.Label(FrameH1, text= "EQLAFLIX", font= appFont, bg= appBG2, fg=policeBG, padx=padding, borderwidth=Bdheight)
 TitleH2 =tk.Label(FrameH1, text= "Votre plateforme d'information sur les films, séries et jeux vidéos", font= appFont, bg= appBG2, fg=policeBG, padx=padding, borderwidth=Bdheight)
 
+#importation du logo
+
+
+try :
+	logopath = os.path.join(os.path.dirname(__file__), "logo.gif")
+	canvas= tk.Canvas(WindowFrame,width=300, height= 100, highlightbackground="black")
+	logo = tk.PhotoImage(file=logopath)
+	item = canvas.create_image(180,70, image= logo)
+	canvas.pack(side = TOP)
+	FrameH1.config(background=appBG, borderwidth= "0px", pady=0)
+	TitleH2.config(background=appBG)
+except: 
+	TitleH1 =tk.Label(FrameH1, text= "EQLAFLIX", font= appFont, bg= appBG2, fg=policeBG, padx=padding, borderwidth=Bdheight)
+	TitleH1.pack()
 
 MenuFrame = tk.Frame(WindowFrame, width= root.winfo_screenwidth(), bg="black")
 ShowAllButton= tk.Button(MenuFrame, text= "VOIR TOUTES LES SERIES", command= lambda : [f()for f in [ShowAllseries]] , font = ("Helvetica", 15))
@@ -364,11 +377,11 @@ option_value.set(options[0])
 
 
 WindowFrame.pack(side = TOP, fill = BOTH)
-FrameH1.pack(side=TOP, fill= Y)
+FrameH1.pack(side=TOP)
 MenuFrame.pack(fill= Y)
 SortFrame.pack(side=LEFT)
 
-TitleH1.pack()
+# TitleH1.pack()
 TitleH2.pack()
 
 global updatebutton
