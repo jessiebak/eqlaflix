@@ -206,8 +206,9 @@ def updaterecord(tableNumber):
 
 		curseur.execute(req, data)
 		response = curseur.fetchall()
+
 		updatebutton.configure(command = lambda : updaterecord(1))
-		searchEntry.bind_all("<Enter>", lambda : updaterecord(1))
+		root.bind_all('<F5>', lambda event: updaterecord(1))
 
 		for i, n in enumerate(response):
 			ResultGrid.insert(parent="",index=i, iid=i, values=(n[1], n[3], n[4], n[5],n[6]), tags=n[1])
@@ -218,8 +219,10 @@ def updaterecord(tableNumber):
 		data = "%" + searching +'%',
 		curseur.execute(req, data)
 		response = curseur.fetchall()
+
 		updatebutton.config(command = lambda : updaterecord(2))
-		searchEntry.bind("<Enter>", lambda : updaterecord(2))
+		root.bind_all('<F5>', lambda event: updaterecord(2))
+		
 		for i, n in enumerate(response):
 			ResultGrid.insert(parent="",index=i, iid=i, values=(n[1], n[4], n[2], n[3],n[5]), tags=n[1])
 	
@@ -230,12 +233,16 @@ def updaterecord(tableNumber):
 		data = "%" + searching + '%', 
 		curseur.execute(req, data)
 		response = curseur.fetchall()
+		root.bind_all('<F5>', lambda event: updaterecord(3))
 		updatebutton.config(command = lambda : updaterecord(3))
-		searchEntry.bind("<Enter>", lambda : updaterecord(3))
 	
 		for i, n in enumerate(response):
 			ResultGrid.insert(parent="",index=i, iid=i, values=(n[1], n[2], n[3], n[4],n[5]), tags=n[1])
-				
+
+
+
+
+
 def optionlistconfig(_mode): 
 
 	if _mode == "series": 
@@ -291,7 +298,7 @@ def CheckOrder(_categorie):
 		elif option_value.get() == options[4]: 
 			return "order by Videogames_Editeur"
 		elif option_value.get() == options[5]: 
-			return "order by Videogames_Categorie"
+			return "order by Videogames_Categorie"  
 	
 global connexion 
 connexion = AllUsersConnection()
@@ -373,6 +380,10 @@ global ResultGrid
 ResultGrid = ttk.Treeview(resultbox, height= root.winfo_screenheight())
 ResultGrid.pack(fill= BOTH, expand= True)
 	
+
+root.bind_all('<Control-s>', lambda event: Seriesmode())
+root.bind_all('<Control-f>', lambda event: FilmsMode())
+root.bind_all('<Control-j>', lambda event : GamesMode())
 
 #End of app method, close window and SQL server
 
