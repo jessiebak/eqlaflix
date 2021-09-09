@@ -229,8 +229,9 @@ def updaterecord(tableNumber):
 	
 	
 	if tableNumber == 1: 
+		_order = CheckOrder("series")
 		
-		req = "select * from series where Serie_TitreVF like %s"
+		req = "select * from series where Serie_TitreVF like %s" + _order
 		data = "%" + searching +'%',
 
 		curseur.execute(req, data)
@@ -336,20 +337,54 @@ def optionlistconfig(_mode):
 		_optionlist = ["Trier par Titre", "Trier par Date de sortie", "Trier par épisodes", 'Trier par Saisons']
 		return _optionlist
 	elif _mode == "films": 
-		_optionlist = ["Trier par Titre", "Trier par Date de sortie", "Trier par genre", "Tier par Box Office"]		
+		_optionlist = ["Trier par Titre", "Trier par Date de sortie", "Trier par genre", "Tier par Box Office", "Trier par Réalisateur"]		
 		return _optionlist
 
 	elif _mode == "games":	
-		_optionlist = ["Trier par Titre","Trier par Date de sortie", "Trier par Editeur", "Trier par Développeur", "Trier par Genrde"] 
+		_optionlist = ["Trier par Titre","Trier par Date de sortie", "Trier par Editeur", "Trier par Développeur", "Trier par Catégorie"] 
 		return _optionlist	
 
+
+def CheckOrder(_caterogie): 
+
+
+
+	if _caterogie == "series": 
+		if option_value.get() == options[0]:
+			return "order by Serie_TitreVF"
+		elif option_value.get() == options[1]: 
+			return "order by Serie_DateSortie DESC"
+		elif option_value.get() == options[2]: 
+			return "order by Series_Episode"
+		elif option_value.get() == options [3]: 
+			return "order by Serie_Saisons"
+	elif _caterogie == "films":
+		if option_value.get() == options[0]:
+			return "order by Titre"
+		elif option_value.get() == options[1]: 
+			return "order by DateSortie DESC"
+		elif option_value.get() == options[2]: 
+			return "order by Genre"
+		elif option_value.get() == options [3]: 
+			return "order by BoxOffice"
+		elif option_value.get() == options [4]: 
+			return "order by Realisateur"
+	elif _caterogie == "games":
+		if option_value.get() == options[0]:
+			return "order by Videogames_Titre"
+		elif option_value.get() == options[1]: 
+			return "order by Videogames_DateSortie DESC"
+		elif option_value.get() == options[2]: 
+			return "order by Vidéogames_Développeur"
+		elif option_value.get() == options [3]: 
+			return "order by Vidéogames_Categorie"
 
 
 		
 
 
 
-global sortinglist 
+global sortinglist, option_value, options
 
 choice = tk.StringVar()
 
@@ -358,6 +393,7 @@ SortFrame = tk.Frame(WindowFrame)
 options = optionlistconfig("series")
 option_value = tk.StringVar()
 sortinglist = tk.OptionMenu(SortFrame, option_value, *options) 
+option_value.set(options[0])
 sortinglist.pack(side=LEFT)
 
 
