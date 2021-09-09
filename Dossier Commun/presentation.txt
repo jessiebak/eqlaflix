@@ -1,33 +1,46 @@
-- Présenter l'équipe et les rôles de chacun
-- Explication du projet et des objectifs principaux
-- Explication de ce qu'on a fait en plus (Bonus rajoutés) 
-- Présentation du résultat et test avec ET sans synthèse vocale
-- Ce qui n'a pas été fait, ce qui aurait pu être mieux fait, ce dont vous êtes fier.
-- Retour d'expérience : difficultés, temps, séparation des parties, anecdotes
-- A long terme: ce qu'on rajouterais au projet pour le développer
-- Mettre le logiciel à disposition sur PC pour le faire tester
 
-I-  introduction :
-    a-  Présentation de l'équipe et des rôles de chacun  
-    b-  D'où nous vient l'idée du projet ? 
-    c-  Quelle problèmatique souhaitons nous résoudre ? 
-II- mise en oeuvre 
-    a-  aléatoire-  organisation du travail 
-    b-  outils utiliser et la raison de leurs utilisation? 
-    c-  les nouveaux outils appris 
-III- Présentation et démonstratioin  en graphique  
-    a-  présentation globale de l'interface et de ses fonctionnalités 
-    b-  démonstration: 
-    c-  statistiques (outils, fonctions,  )
-IV-  présentation et démonstration en console 
-    a-  présentation globale de l'interface "console" (15 fonctionnalités et sous fonctionnalités)
-    b-  démonstration 
-    c-  statistiques
-V-  recap et synthèse des travaux 
-    a-  l'objectif a t il été ateint ? 
-    b-  nombre d'outils utiliser ? nbre de bibliothèque ? nobre de fonctions ? 
-    c-  perspectives et ouverture du débats 
-        -   les défis auxquels nous avons fait face ? 
-        -   les manquements ? 
-        -   solutions que nous proposons ? 
-        -   les fonctions à rajouter dans le futur ? 
+II-PRESENTATION DE LA CONSOLE :
+
+    1-  Avant habillage (la mise en forme) graphique, les développeurs prévisualisent généralement les résultats d'une applications en cours de développement en mode console.
+
+    2-  je m'appelle tcheuyassi isaac et je vais vous présenter via la console les résultats de nos travaux : 
+
+   3- comme vient de souligner mon camarade maxime, et comme vous pouvez le remarquer dès le lancement de l'exécutable de notre application, nous avons axés nos travaux autour de 3 types de médias principaux. 
+
+        et nous avons developper pour chaque type de média ici présent environ 15 fonctionnalités et sous fonctionnalités
+
+    Et toutes ces fonctionnalités et sous fonctionnalités sont réalisées par le biais de fonctions (pour le coup, on peut compter environ 25 fonctions par types de média ).
+
+Pour cette présentation, je vous propose de tester quelques unes de ces fonctionnalités avec moi. 
+
+sans plus tarder, choisissons l'un des 3 types de média que nous proposes le programme principal(par exemple le 2)
+
+comme le disait maxime tout à l'heure, pour sauvegarder toutes les informations des médias, nous avons implémenté une bd mysql avec des tables. 
+
+ pour le média films, nous avons crées deux tables, une pour contenir les genre du films et l'autre pour les champs restants;
+
+vu que nous avons environ une cinquantaine d'enregistrement dans notre table films, je vous propose de commencer l'exploration de notre applications par la première option d'affichage
+
+très vite quand on lance cette première fonctionnalité, le programme nous propose de choisir les différents champs que nous souhaitons visualiser. 
+
+pour le choix des champs, nous donnons la latitude à notre utilisateur de choisir lui mmee les champs qu'il souhaite afficher et tout ceci dans l'ordre de son choix )
+
+->c'est également l'occasion pour moi ici de souligner que notre programmeintègre: 
+
+    -   la gestion des erreurs ( cela signifie ici que les valeurs autres que celles demandées ici ne font pas buguer notre programme mais signale à l'utilisateur qu'il a éffectuer un choix incorrect. )
+
+    -   notre programme intègre une facilité de validation sans pareil, la facilité de validation (c a d "en pressant la touche entrer sans aucun choix , fait comprendre à notre programme que vous choisissez de tout afficher )
+    -   et si un choix est effectuer au préalable, le programme comprend immédiatement que vous désirez passer immmédiatement à l'affichage
+
+    -   pour terminer, notre programme n'est pas sensible à la casse (nous avons délibérement choisi de tolérer que l'utilisateur en minuscul et en majuscule )
+
+si nous décidons d'afficher les résultats à ce niveau, nous pouvons remarquer qu'on a exactement 52 films dans notre base de donnée... mais aussi que les résultats nous sont donnés par défaut dans l'ordre alphabétique du titre. 
+
+c'est pour cette raison que nous avons décidé de laisser à l'utilisateur la possibilité de choisir le champ par lequel il veut éffectuer le tri 
+ce qui nous conduit tout droit à la fonctionnalité 7
+
+après les fonctionnalités d'affichage, je vous invite d'ajouter avec moi un média dans notre bd. 
+
+
+Pour améliorer d'avantage l'expérience utilisateur, nous avons mis en oeuvre une interface graphique qui présente une net amélioration et ues avantages par rapport à la console que je laisse le soin à mon camarade jessie de vous présenter  
+
