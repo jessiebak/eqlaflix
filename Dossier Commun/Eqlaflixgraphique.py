@@ -59,12 +59,6 @@ def ShowAllGames():
 	updaterecord(3)
 
 
-
-def classsify():
-	pass
-	
-	
-
 def TreeviewSeries(ResultGrid):
 
 	ResultGrid["columns"]= ("Titre", "DateSortie", "Episodes", "Saisons", "Description")
@@ -83,8 +77,6 @@ def TreeviewSeries(ResultGrid):
 	ResultGrid.heading("Description", text= "Description", anchor = CENTER)
 
 	#linking Scrollbar to Treeview
-
-
 		
 	scrollingX = tk.Scrollbar(resultbox, orient= HORIZONTAL)
 	scrollingY = tk.Scrollbar(resultbox, orient= VERTICAL)
@@ -95,12 +87,8 @@ def TreeviewSeries(ResultGrid):
 	scrollingY.config(command=ResultGrid.yview)
 
 	
-
-		
 	ResultGrid.pack(fill= BOTH, expand= True)
 
-
-	
 
 	#adding Style 
 	style = ttk.Style()
@@ -142,7 +130,7 @@ def TreeviewFilms(ResultGrid):
 	style.theme_use("default")
 	style.configure("Treeview",background= "light goldenrod yellow", foreground= "white", fieldbackground="#1F1F1F", rowheight=35, color="white", font=("Helvetica",10))
 	style.map("Treeview", background=[("selected", appBG2)])
-	pass
+	
 
 def TreeviewGames(ResultGrid):
 	ResultGrid["columns"]= ("Titre", "DateSortie", "Développeur", "Editeur", "Catégorie")
@@ -181,25 +169,29 @@ def TreeviewGames(ResultGrid):
 
 	
 def Seriesmode():
-	global ResultGrid, optionlist
+	global ResultGrid, options
 	for item in ResultGrid.get_children():
 		ResultGrid.delete(item)
 	
 	ShowAllButton.config(text="VOIR TOUTES LES SERIES", command= ShowAllseries)
-	optionlist = optionlistconfig("series")	
-	sortinglist.configure(value= optionlist)
-	
-
+	options = optionlistconfig("series")
+	option_value.set(options[0])
+	sortinglist['menu'].delete(0,END)
+	for choice in options:
+		sortinglist["menu"].add_command(label=choice, command=tk._setit(option_value, choice))
 def FilmsMode():
 	
-	global ResultGrid, optionlist
+	global ResultGrid, options
 	for item in ResultGrid.get_children():
 		ResultGrid.delete(item)
 	
 	
 	ShowAllButton.config(text= "VOIR TOUS LES FILMS", command= ShowAllFilms)
-	optionlist = optionlistconfig("films")
-	sortinglist.configure(value = optionlist) 
+	options = optionlistconfig("films")
+	option_value.set(options[0])
+	sortinglist['menu'].delete(0,END)
+	for choice in options:
+		sortinglist["menu"].add_command(label=choice, command=tk._setit(option_value, choice))
 	
 
 def GamesMode():
@@ -207,12 +199,12 @@ def GamesMode():
 	for item in ResultGrid.get_children():
 		ResultGrid.delete(item)
 	
-	
-	
 	ShowAllButton.config(text= "VOIR TOUS LES JEUX", command= ShowAllGames)
-	optionlist = optionlistconfig("games")
-	sortinglist.configure(value = optionlist)
-
+	options = optionlistconfig("games")
+	option_value.set(options[0])
+	sortinglist['menu'].delete(0,END)
+	for choice in options:
+		sortinglist["menu"].add_command(label=choice, command=tk._setit(option_value, choice))
 
 
 	
@@ -222,7 +214,6 @@ def updaterecord(tableNumber):
 	searching = searchEntry.get() 
 
 	curseur = connexion.cursor()
-	
 	
 	for record in ResultGrid.get_children(): 
 		ResultGrid.delete(record)
@@ -241,8 +232,8 @@ def updaterecord(tableNumber):
 		for i, n in enumerate(response):
 			ResultGrid.insert(parent="",index=i, iid=i, values=(n[1], n[3], n[4], n[5],n[6]), tags=n[1])
 	elif tableNumber == 2:
-		
-		req = "select films.IdFilm, films.Titre, genrefilm.nom, films.realisateur, films.datesortie, films.boxoffice from films inner join genrefilm on films.genre = genrefilm.idgenre where films.Titre like %s"
+		_order = CheckOrder("films")
+		req = "select films.IdFilm, films.Titre, genrefilm.nom, films.realisateur, films.datesortie, films.boxoffice from films inner join genrefilm on films.genre = genrefilm.idgenre where films.Titre like %s" + _order
 		data = "%" + searching +'%',
 		curseur.execute(req, data)
 		response = curseur.fetchall()
@@ -252,13 +243,14 @@ def updaterecord(tableNumber):
 			ResultGrid.insert(parent="",index=i, iid=i, values=(n[1], n[4], n[2], n[3],n[5]), tags=n[1])
 	
 	elif tableNumber == 3:	
-		
-		req = "select * from videogames  where Videogames_Titre like %s"
+
+		_order = CheckOrder("games")
+		req = "select * from videogames  where videogames_Titre like %s" + _order 
 		data = "%" + searching + '%', 
 		curseur.execute(req, data)
 		response = curseur.fetchall()
 		updatebutton.config(command = lambda : updaterecord(3))
-		searchEntry.bind("<Enter>", lambda : updaterecord(3))
+		# searchEntry.bind("<Enter>", lambda : updaterecord(3))
 	
 		for i, n in enumerate(response):
 				ResultGrid.insert(parent="",index=i, iid=i, values=(n[1], n[2], n[3], n[4],n[5]), tags=n[1])
@@ -334,10 +326,10 @@ except ProgrammingError:
 def optionlistconfig(_mode): 
 
 	if _mode == "series": 
-		_optionlist = ["Trier par Titre", "Trier par Date de sortie", "Trier par épisodes", 'Trier par Saisons']
+		_optionlist = ["Trier par Titre", "Trier par Date de sortie (plus récent)","Trier par Date de sortie (plus ancien)" , "Trier par Episode (Le plus)", "Trier par Episodes (Le moins)", 'Trier par Saisons (Le plus)', "Trier par Saison (Le moins)"]
 		return _optionlist
 	elif _mode == "films": 
-		_optionlist = ["Trier par Titre", "Trier par Date de sortie", "Trier par genre", "Tier par Box Office", "Trier par Réalisateur"]		
+		_optionlist = ["Trier par Titre", "Trier par Date de sortie (Le plus récent)", "Trier par Date de sortie (Le plus ancien)", "Trier par genre", "Tier par Box Office", "Trier par Réalisateur"]		
 		return _optionlist
 
 	elif _mode == "games":	
@@ -345,39 +337,47 @@ def optionlistconfig(_mode):
 		return _optionlist	
 
 
-def CheckOrder(_caterogie): 
+def CheckOrder(_categorie): 
 
 
 
-	if _caterogie == "series": 
+	if _categorie == "series": 
 		if option_value.get() == options[0]:
 			return "order by Serie_TitreVF"
 		elif option_value.get() == options[1]: 
 			return "order by Serie_DateSortie DESC"
 		elif option_value.get() == options[2]: 
-			return "order by Series_Episode"
-		elif option_value.get() == options [3]: 
+			return "order by Serie_DateSortie"
+		elif option_value.get() == options[3]: 
+			return "order by Series_Episode DESC"
+		elif option_value.get() == options[4]: 
+			return "order by Series_Episode "
+		elif option_value.get() == options [5]: 
+			return "order by Serie_Saisons DESC"
+		elif option_value.get() == options [6]: 
 			return "order by Serie_Saisons"
-	elif _caterogie == "films":
+	elif _categorie == "films":
 		if option_value.get() == options[0]:
-			return "order by Titre"
+			return "order by films.Titre"
 		elif option_value.get() == options[1]: 
-			return "order by DateSortie DESC"
+			return "order by films.DateSortie DESC"
 		elif option_value.get() == options[2]: 
-			return "order by Genre"
-		elif option_value.get() == options [3]: 
-			return "order by BoxOffice"
+			return "order by films.DateSortie"
+		elif option_value.get() == options[3]: 
+			return "order by films.Genre"
 		elif option_value.get() == options [4]: 
-			return "order by Realisateur"
-	elif _caterogie == "games":
+			return "order by films.BoxOffice"
+		elif option_value.get() == options [5]: 
+			return "order by films.Realisateur"
+	elif _categorie == "games":
 		if option_value.get() == options[0]:
 			return "order by Videogames_Titre"
 		elif option_value.get() == options[1]: 
 			return "order by Videogames_DateSortie DESC"
 		elif option_value.get() == options[2]: 
-			return "order by Vidéogames_Développeur"
+			return "order by Videogames_Développeur"
 		elif option_value.get() == options [3]: 
-			return "order by Vidéogames_Categorie"
+			return "order by Videogames_Categorie"
 
 
 		
