@@ -9,7 +9,7 @@ import tkinter.ttk as ttk
 
 from mysql.connector import connection
 from mysql.connector.errors import ProgrammingError 
-
+from films.Execute_Req import AllUsersConnection
 def ShowAllseries():
 	   
 	TreeviewSeries(ResultGrid)
@@ -293,6 +293,9 @@ def CheckOrder(_categorie):
 		elif option_value.get() == options[5]: 
 			return "order by Videogames_Categorie"
 	
+global connexion 
+connexion = AllUsersConnection()
+
 #creating Window
 root = tk.Tk()
 root.title("Eqlaflix - Votre plafeforme d'information Films, jeux et séries")
@@ -337,20 +340,6 @@ global searchEntry
 searchEntry= tk.Entry(MenuFrame, font=appFont)
 
 
-global connexion 
-try : 
-	connexion = MC.connect(database="Eqlaflix", password= "isaac", user= "root")
-except ProgrammingError: 
-	try: 
-		connexion = MC.connect(database="Eqlaflix", password= "python4life", user= "root")
-	except:
-		try:
-			connexion = MC.connect(database="Eqlaflix", password= "g5gqwagr", user= "root")
-		except ProgrammingError:
-			errorFrame = tk.Frame(WindowFrame, bg= appBG, bd = "5px", highlightbackground="red", highlightthickness="5px")
-			Errorlabel = tk.Label(errorFrame, text= "Impossible de se connecter à la base de données / Mot de passe incorrect ", bg= appBG, fg="white")
-			errorFrame.pack(side = TOP)
-			Errorlabel.pack()
 
 
 
